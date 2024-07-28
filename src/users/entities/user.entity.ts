@@ -5,24 +5,34 @@ import { IsEmail, IsString, IsUrl, Length } from 'class-validator';
 // utils
 import { WithIdAndDates } from 'src/utils/entities/with-id-and-dates';
 
+// constants
+import {
+  MIN_USER_ABOUT_LENGTH,
+  MAX_USER_ABOUT_LENGTH,
+  MIN_USERNAME_LENGTH,
+  MAX_USERNAME_LENGTH,
+  DEFAULT_USER_AVATAR,
+  DEFAULT_USER_ABOUT,
+} from 'src/utils/constants';
+
 // content
 
 @Entity()
 export class User extends WithIdAndDates {
   @IsString()
-  @Length(2, 30)
+  @Length(MIN_USERNAME_LENGTH, MAX_USERNAME_LENGTH)
   @Column({
-    length: 30,
+    length: MAX_USERNAME_LENGTH,
     unique: true,
     update: false,
   })
   username: string;
 
   @IsString()
-  @Length(2, 200)
+  @Length(MIN_USER_ABOUT_LENGTH, MAX_USER_ABOUT_LENGTH)
   @Column({
-    length: 200,
-    default: 'Пока ничего не рассказал о себе',
+    length: MAX_USER_ABOUT_LENGTH,
+    default: DEFAULT_USER_ABOUT,
   })
   about: string;
 
@@ -30,7 +40,7 @@ export class User extends WithIdAndDates {
     protocols: ['http', 'https'],
   })
   @Column({
-    default: 'https://i.pravatar.cc/300',
+    default: DEFAULT_USER_AVATAR,
   })
   avatar: string;
 
