@@ -1,6 +1,11 @@
 // decorators
 import { Column, Entity } from 'typeorm';
-import { IsEmail, IsString, IsUrl, Length } from 'class-validator';
+import { IsEmail, IsHash, IsString, IsUrl, Length } from 'class-validator';
+
+// entities
+import { Wish } from 'src/wishes/entities/wish.entity';
+import { Offer } from 'src/offers/entities/offer.entity';
+import { Wishlist } from 'src/wishlists/entities/wishlist.entity';
 
 // utils
 import { WithIdAndDates } from 'src/utils/entities/with-id-and-dates';
@@ -53,10 +58,19 @@ export class User extends WithIdAndDates {
   })
   email: string;
 
+  @IsHash('sha256')
   @Column()
   password: string;
 
-  // wishes
-  // offers
-  // wishlists
+  @Column()
+  // TODO define relation
+  wishes: Array<Wish>;
+
+  @Column()
+  // TODO define relation
+  offers: Array<Offer>;
+
+  @Column()
+  // TODO define relation
+  wishlists: Array<Wishlist>;
 }

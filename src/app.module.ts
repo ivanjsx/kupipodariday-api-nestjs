@@ -11,6 +11,12 @@ import { WishlistsModule } from './wishlists/wishlists.module';
 // orm modules
 import { TypeOrmModule } from '@nestjs/typeorm';
 
+// entities
+import { User } from './users/entities/user.entity';
+import { Wish } from './wishes/entities/wish.entity';
+import { Offer } from './offers/entities/offer.entity';
+import { Wishlist } from './wishlists/entities/wishlist.entity';
+
 // content
 
 @Module({
@@ -28,7 +34,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       password: 'student',
       database: 'kupipodariday',
       schema: 'public',
-      entities: [],
+      entities: [User, Wish, Offer, Wishlist],
       synchronize: true,
     }),
   ],
