@@ -16,3 +16,11 @@ export const MAX_WISH_NAME_LENGTH = 250;
 
 export const MIN_WISH_DESCRIPTION_LENGTH = 1;
 export const MAX_WISH_DESCRIPTION_LENGTH = 1024;
+
+// wishlists
+
+export const MIN_WISHLIST_NAME_LENGTH = 1;
+export const MAX_WISHLIST_NAME_LENGTH = 250;
+
+export const MIN_WISHLIST_DESCRIPTION_LENGTH = 1;
+export const MAX_WISHLIST_DESCRIPTION_LENGTH = 1500;
