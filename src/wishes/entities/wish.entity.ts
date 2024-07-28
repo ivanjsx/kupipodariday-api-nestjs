@@ -15,6 +15,7 @@ import {
   MAX_WISH_DESCRIPTION_LENGTH,
   MIN_WISH_NAME_LENGTH,
   MAX_WISH_NAME_LENGTH,
+  MONEY_DECIMAL_PLACES,
 } from 'src/utils/constants';
 
 // content
@@ -43,20 +44,20 @@ export class Wish extends WithIdAndDates {
   @IsNumber({
     allowNaN: false,
     allowInfinity: false,
-    maxDecimalPlaces: 2,
+    maxDecimalPlaces: MONEY_DECIMAL_PLACES,
   })
   @Column({
-    scale: 2,
+    scale: MONEY_DECIMAL_PLACES,
   })
   price: number;
 
   @IsNumber({
     allowNaN: false,
     allowInfinity: false,
-    maxDecimalPlaces: 2,
+    maxDecimalPlaces: MONEY_DECIMAL_PLACES,
   })
   @Column({
-    scale: 2,
+    scale: MONEY_DECIMAL_PLACES,
   })
   raised: number;
 
