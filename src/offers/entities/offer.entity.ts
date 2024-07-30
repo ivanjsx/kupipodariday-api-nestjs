@@ -1,5 +1,5 @@
 // decorators
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, ManyToOne } from 'typeorm';
 import { IsBoolean, IsNumber } from 'class-validator';
 
 // entities
@@ -33,10 +33,10 @@ export class Offer extends WithIdAndDates {
   amount: number;
 
   @Column()
-  // TODO define relation
+  @ManyToOne(() => User, (user) => user.offers)
   user: User;
 
   @Column()
-  // TODO define relation
+  @ManyToOne(() => Wish, (wish) => wish.offers)
   item: Wish;
 }

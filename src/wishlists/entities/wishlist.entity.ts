@@ -1,8 +1,9 @@
 // decorators
-import { Column, Entity } from 'typeorm';
 import { IsString, IsUrl, Length } from 'class-validator';
+import { Column, Entity, ManyToMany, ManyToOne } from 'typeorm';
 
 // entities
+import { User } from 'src/users/entities/user.entity';
 import { Wish } from 'src/wishes/entities/wish.entity';
 
 // utils
@@ -41,6 +42,10 @@ export class Wishlist extends WithIdAndDates {
   description: string;
 
   @Column()
-  // TODO define relation
+  @ManyToOne(() => User, (user) => user.wishlists)
+  author: User;
+
+  @Column()
+  @ManyToMany(() => Wish, (wish) => wish.lists)
   items: Array<Wish>;
 }

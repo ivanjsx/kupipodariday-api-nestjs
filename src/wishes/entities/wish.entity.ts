@@ -1,10 +1,11 @@
 // decorators
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, ManyToMany, ManyToOne, OneToMany } from 'typeorm';
 import { IsNumber, IsString, IsUrl, Length } from 'class-validator';
 
 // entities
 import { User } from 'src/users/entities/user.entity';
 import { Offer } from 'src/offers/entities/offer.entity';
+import { Wishlist } from 'src/wishlists/entities/wishlist.entity';
 
 // utils
 import { WithIdAndDates } from 'src/utils/entities/with-id-and-dates';
@@ -79,10 +80,14 @@ export class Wish extends WithIdAndDates {
   copied: number;
 
   @Column()
-  // TODO define relation
+  @ManyToOne(() => User, (user) => user.wishes)
   owner: User;
 
   @Column()
-  // TODO define relation
+  @OneToMany(() => Offer, (offer) => offer.item)
   offers: Array<Offer>;
+
+  @Column()
+  @ManyToMany(() => Wishlist, (wishlist) => wishlist.items)
+  lists: Array<Wishlist>;
 }

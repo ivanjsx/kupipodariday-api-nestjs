@@ -1,5 +1,5 @@
 // decorators
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, OneToMany } from 'typeorm';
 import { IsEmail, IsHash, IsString, IsUrl, Length } from 'class-validator';
 
 // entities
@@ -29,7 +29,6 @@ export class User extends WithIdAndDates {
   @Column({
     length: MAX_USERNAME_LENGTH,
     unique: true,
-    update: false,
   })
   username: string;
 
@@ -54,7 +53,6 @@ export class User extends WithIdAndDates {
   })
   @Column({
     unique: true,
-    update: false,
   })
   email: string;
 
@@ -63,14 +61,14 @@ export class User extends WithIdAndDates {
   password: string;
 
   @Column()
-  // TODO define relation
+  @OneToMany(() => Wish, (wish) => wish.owner)
   wishes: Array<Wish>;
 
   @Column()
-  // TODO define relation
+  @OneToMany(() => Offer, (offer) => offer.user)
   offers: Array<Offer>;
 
   @Column()
-  // TODO define relation
+  @OneToMany(() => Wishlist, (wishlist) => wishlist.author)
   wishlists: Array<Wishlist>;
 }
