@@ -9,7 +9,7 @@ import { UsersService } from './users.service';
 
 // entities
 import { User } from './entities/user.entity';
-import { Wish } from '../wishes/entities/wish.entity';
+import { Wish } from 'src/wishes/entities/wish.entity';
 
 // data transfer objects
 import { UpdateUserDto } from './dto/update-user.dto';
