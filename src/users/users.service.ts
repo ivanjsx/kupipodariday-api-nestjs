@@ -1,26 +1,42 @@
+// decorators
 import { Injectable } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
+
+// providers
+import { Repository } from 'typeorm';
+
+// entities
+import { User } from './entities/user.entity';
+
+// data transfer objects
 import { UpdateUserDto } from './dto/update-user.dto';
+import { SearchUserDto } from './dto/search-user.dto';
+
+// content
 
 @Injectable()
 export class UsersService {
-  create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
+  constructor(private readonly usersRepository: Repository<User>) {}
+
+  findOne(username: string): Promise<User> {
+    return this.usersRepository.findOneByOrFail({ username });
   }
 
-  findAll() {
-    return `This action returns all users`;
+  findOneWithWishes(username: string): Promise<User> {
+    return this.usersRepository.findOneOrFail({
+      where: { username },
+      relations: ['wishes'],
+    });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async updateOne(username: string, data: UpdateUserDto): Promise<User> {
+    const user = await this.usersRepository.findOneByOrFail({ username });
+    return this.usersRepository.save({ ...user, ...data });
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  findMany(data: SearchUserDto): Promise<Array<User>> {
+    const { query } = data;
+    return this.usersRepository.find({
+      where: [{ email: query }, { username: query }],
+    });
   }
 }
