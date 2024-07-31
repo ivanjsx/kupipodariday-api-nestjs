@@ -31,3 +31,8 @@ export const MAX_WISHLIST_DESCRIPTION_LENGTH = 1500;
 // common
 
 export const MONEY_DECIMAL_PLACES = 2;
+
+export enum Direction {
+  ASC = 'ASC',
+  DESC = 'DESC',
+}
