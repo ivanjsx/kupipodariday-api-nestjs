@@ -1,1 +1,5 @@
-export class CreateOfferDto {}
+export class CreateOfferDto {
+  hidden: boolean;
+  amount: number;
+  itemId: number;
+}
