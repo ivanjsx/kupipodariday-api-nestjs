@@ -7,7 +7,7 @@ import {
 
 // content
 
-export class WithIdAndDates {
+export abstract class WithIdAndDates {
   @PrimaryGeneratedColumn()
   id: number;
 

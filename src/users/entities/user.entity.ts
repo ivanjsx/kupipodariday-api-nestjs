@@ -1,6 +1,13 @@
 // decorators
 import { Column, Entity, OneToMany } from 'typeorm';
-import { IsEmail, IsHash, IsString, IsUrl, Length } from 'class-validator';
+import {
+  IsNotEmpty,
+  NotEquals,
+  IsEmail,
+  Length,
+  IsHash,
+  IsUrl,
+} from 'class-validator';
 
 // entities
 import { Wish } from 'src/wishes/entities/wish.entity';
@@ -24,6 +31,7 @@ import {
 
 @Entity()
 export class User extends WithIdAndDates {
+  @IsNotEmpty()
   @IsEmail({
     allow_utf8_local_part: false,
   })
@@ -32,11 +40,16 @@ export class User extends WithIdAndDates {
   })
   email: string;
 
+  @IsNotEmpty()
   @IsHash('sha256')
-  @Column()
+  @Column({
+    select: false,
+  })
   password: string;
 
-  @IsString()
+  @IsNotEmpty()
+  @NotEquals('me')
+  @NotEquals('admin')
   @Length(MIN_USERNAME_LENGTH, MAX_USERNAME_LENGTH)
   @Column({
     length: MAX_USERNAME_LENGTH,
@@ -44,7 +57,7 @@ export class User extends WithIdAndDates {
   })
   username: string;
 
-  @IsString()
+  @IsNotEmpty()
   @Length(MIN_USER_ABOUT_LENGTH, MAX_USER_ABOUT_LENGTH)
   @Column({
     length: MAX_USER_ABOUT_LENGTH,
@@ -52,6 +65,7 @@ export class User extends WithIdAndDates {
   })
   about: string;
 
+  @IsNotEmpty()
   @IsUrl({
     protocols: ['http', 'https'],
   })
@@ -60,15 +74,21 @@ export class User extends WithIdAndDates {
   })
   avatar: string;
 
-  @Column()
   @OneToMany(() => Wish, (wish) => wish.owner)
+  @Column({
+    array: true,
+  })
   wishes: Array<Wish>;
 
-  @Column()
   @OneToMany(() => Offer, (offer) => offer.user)
+  @Column({
+    array: true,
+  })
   offers: Array<Offer>;
 
-  @Column()
   @OneToMany(() => Wishlist, (wishlist) => wishlist.author)
+  @Column({
+    array: true,
+  })
   wishlists: Array<Wishlist>;
 }
