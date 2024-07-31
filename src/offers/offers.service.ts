@@ -1,26 +1,31 @@
+// decorators
 import { Injectable } from '@nestjs/common';
+
+// providers
+import { Repository } from 'typeorm';
+
+// entities
+import { Offer } from './entities/offer.entity';
+
+// data transfer objects
 import { CreateOfferDto } from './dto/create-offer.dto';
-import { UpdateOfferDto } from './dto/update-offer.dto';
+
+// content
 
 @Injectable()
 export class OffersService {
-  create(createOfferDto: CreateOfferDto) {
-    return 'This action adds a new offer';
+  constructor(private readonly wishesRepository: Repository<Offer>) {}
+
+  async createOne(data: CreateOfferDto): Promise<Offer> {
+    const insertResult = await this.wishesRepository.insert(data);
+    return insertResult.generatedMaps[0] as Offer;
   }
 
   findAll() {
-    return `This action returns all offers`;
+    return this.wishesRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} offer`;
-  }
-
-  update(id: number, updateOfferDto: UpdateOfferDto) {
-    return `This action updates a #${id} offer`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} offer`;
+  findOne(id: number): Promise<Offer> {
+    return this.wishesRepository.findOneByOrFail({ id });
   }
 }
