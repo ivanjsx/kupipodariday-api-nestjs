@@ -2,12 +2,12 @@
 import {
   ParseIntPipe,
   Controller,
+  Delete,
   Param,
-  Get,
   Patch,
   Body,
-  Delete,
   Post,
+  Get,
 } from '@nestjs/common';
 
 // providers
@@ -59,13 +59,13 @@ export class WishesController {
 
   @Get('last')
   findLast(): Promise<Array<Wish>> {
-    const limit = LAST_WISHES_LIMIT; // might as well parse from query params
+    const limit = LAST_WISHES_LIMIT;
     return this.wishesService.findLast(limit);
   }
 
   @Get('top')
   findTop(): Promise<Array<Wish>> {
-    const limit = TOP_WISHES_LIMIT; // might as well parse from query params
+    const limit = TOP_WISHES_LIMIT;
     return this.wishesService.findTop(limit);
   }
 }

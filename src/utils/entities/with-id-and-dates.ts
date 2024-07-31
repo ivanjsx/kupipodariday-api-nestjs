@@ -1,8 +1,11 @@
+// decorators
 import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
 } from 'typeorm';
+
+// content
 
 export class WithIdAndDates {
   @PrimaryGeneratedColumn()

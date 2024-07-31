@@ -1,11 +1,11 @@
 // decorators
 import {
+  ParseIntPipe,
   Controller,
   Param,
   Body,
   Post,
   Get,
-  ParseIntPipe,
 } from '@nestjs/common';
 
 // providers
@@ -29,7 +29,7 @@ export class OffersController {
   }
 
   @Get()
-  findAll() {
+  findAll(): Promise<Array<Offer>> {
     return this.offersService.findAll();
   }
 
