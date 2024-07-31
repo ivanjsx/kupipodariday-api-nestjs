@@ -52,6 +52,13 @@ export class Wish extends WithIdAndDates {
   })
   price: number;
 
+  @IsString()
+  @Length(MIN_WISH_DESCRIPTION_LENGTH, MAX_WISH_DESCRIPTION_LENGTH)
+  @Column({
+    length: MAX_WISH_DESCRIPTION_LENGTH,
+  })
+  description: string;
+
   @IsNumber({
     allowNaN: false,
     allowInfinity: false,
@@ -61,13 +68,6 @@ export class Wish extends WithIdAndDates {
     scale: MONEY_DECIMAL_PLACES,
   })
   raised: number;
-
-  @IsString()
-  @Length(MIN_WISH_DESCRIPTION_LENGTH, MAX_WISH_DESCRIPTION_LENGTH)
-  @Column({
-    length: MAX_WISH_DESCRIPTION_LENGTH,
-  })
-  description: string;
 
   @IsNumber({
     allowNaN: false,

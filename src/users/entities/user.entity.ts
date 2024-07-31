@@ -24,6 +24,18 @@ import {
 
 @Entity()
 export class User extends WithIdAndDates {
+  @IsEmail({
+    allow_utf8_local_part: false,
+  })
+  @Column({
+    unique: true,
+  })
+  email: string;
+
+  @IsHash('sha256')
+  @Column()
+  password: string;
+
   @IsString()
   @Length(MIN_USERNAME_LENGTH, MAX_USERNAME_LENGTH)
   @Column({
@@ -47,18 +59,6 @@ export class User extends WithIdAndDates {
     default: DEFAULT_USER_AVATAR,
   })
   avatar: string;
-
-  @IsEmail({
-    allow_utf8_local_part: false,
-  })
-  @Column({
-    unique: true,
-  })
-  email: string;
-
-  @IsHash('sha256')
-  @Column()
-  password: string;
 
   @Column()
   @OneToMany(() => Wish, (wish) => wish.owner)

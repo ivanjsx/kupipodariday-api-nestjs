@@ -29,7 +29,7 @@ export class UsersService {
   }
 
   async updateOne(username: string, data: UpdateUserDto): Promise<User> {
-    const user = await this.usersRepository.findOneByOrFail({ username });
+    const user = await this.findOne(username);
     return this.usersRepository.save({ ...user, ...data });
   }
 
