@@ -1,13 +1,6 @@
 // decorators
 import { IsNumber, IsString, IsUrl, Length } from 'class-validator';
-import {
-  JoinColumn,
-  ManyToMany,
-  ManyToOne,
-  OneToMany,
-  Entity,
-  Column,
-} from 'typeorm';
+import { ManyToMany, ManyToOne, OneToMany, Entity, Column } from 'typeorm';
 
 // entities
 import { User } from 'src/users/entities/user.entity';
@@ -92,7 +85,6 @@ export class Wish extends WithIdAndDates {
 
   @Column()
   @OneToMany(() => Offer, (offer) => offer.item)
-  @JoinColumn()
   offers: Array<Offer>;
 
   @Column()
