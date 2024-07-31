@@ -1,5 +1,12 @@
 // decorators
-import { IsNumber, IsUrl, Length, Min } from 'class-validator';
+import {
+  IsInt,
+  IsNumber,
+  IsPositive,
+  IsUrl,
+  Length,
+  Min,
+} from 'class-validator';
 import { ManyToMany, ManyToOne, OneToMany, Entity, Column } from 'typeorm';
 
 // entities
@@ -41,7 +48,7 @@ export class Wish extends WithIdAndDates {
   @Column()
   image: string;
 
-  @Min(0)
+  @IsPositive()
   @IsNumber({
     allowNaN: false,
     allowInfinity: false,
@@ -69,12 +76,8 @@ export class Wish extends WithIdAndDates {
   })
   raised: number;
 
+  @IsInt()
   @Min(0)
-  @IsNumber({
-    allowNaN: false,
-    allowInfinity: false,
-    maxDecimalPlaces: 0,
-  })
   @Column({
     scale: 0,
   })

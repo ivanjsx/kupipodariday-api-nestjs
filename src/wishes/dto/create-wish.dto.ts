@@ -1,5 +1,5 @@
 // decorators
-import { IsNumber, IsPositive, IsUrl, Length, Min } from 'class-validator';
+import { IsNumber, IsPositive, IsUrl, Length } from 'class-validator';
 
 // constants
 import {
@@ -27,7 +27,6 @@ export class CreateWishDto {
   image: string;
 
   @IsPositive()
-  @Min(0)
   @IsNumber({
     allowNaN: false,
     allowInfinity: false,

@@ -1,5 +1,5 @@
 // decorators
-import { IsNumber, IsPositive, IsUrl, Length } from 'class-validator';
+import { IsInt, IsPositive, IsUrl, Length } from 'class-validator';
 
 // constants
 import {
@@ -18,10 +18,7 @@ export class CreateWishlistDto {
   })
   image: string;
 
+  @IsInt({ each: true })
   @IsPositive({ each: true })
-  @IsNumber(
-    { allowNaN: false, allowInfinity: false, maxDecimalPlaces: 0 },
-    { each: true },
-  )
   itemsId: Array<number>;
 }

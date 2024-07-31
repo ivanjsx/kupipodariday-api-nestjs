@@ -1,13 +1,6 @@
 // decorators
 import { Column, Entity, OneToMany } from 'typeorm';
-import {
-  IsNotEmpty,
-  NotEquals,
-  IsEmail,
-  Length,
-  IsHash,
-  IsUrl,
-} from 'class-validator';
+import { NotEquals, IsEmail, Length, IsHash, IsUrl } from 'class-validator';
 
 // entities
 import { Wish } from 'src/wishes/entities/wish.entity';
@@ -31,7 +24,6 @@ import {
 
 @Entity()
 export class User extends WithIdAndDates {
-  @IsNotEmpty()
   @IsEmail({
     allow_utf8_local_part: false,
   })
@@ -40,14 +32,12 @@ export class User extends WithIdAndDates {
   })
   email: string;
 
-  @IsNotEmpty()
   @IsHash('sha256')
   @Column({
     select: false,
   })
   password: string;
 
-  @IsNotEmpty()
   @NotEquals('me')
   @NotEquals('admin')
   @Length(MIN_USERNAME_LENGTH, MAX_USERNAME_LENGTH)
@@ -57,7 +47,6 @@ export class User extends WithIdAndDates {
   })
   username: string;
 
-  @IsNotEmpty()
   @Length(MIN_USER_ABOUT_LENGTH, MAX_USER_ABOUT_LENGTH)
   @Column({
     length: MAX_USER_ABOUT_LENGTH,
@@ -65,7 +54,6 @@ export class User extends WithIdAndDates {
   })
   about: string;
 
-  @IsNotEmpty()
   @IsUrl({
     protocols: ['http', 'https'],
   })

@@ -1,12 +1,6 @@
 // decorators
 import { Column, Entity, ManyToOne } from 'typeorm';
-import {
-  IsBoolean,
-  IsNotEmpty,
-  IsNumber,
-  IsPositive,
-  Min,
-} from 'class-validator';
+import { IsBoolean, IsNumber, IsPositive } from 'class-validator';
 
 // entities
 import { User } from 'src/users/entities/user.entity';
@@ -22,16 +16,13 @@ import { MONEY_DECIMAL_PLACES } from 'src/utils/constants';
 
 @Entity()
 export class Offer extends WithIdAndDates {
-  @IsNotEmpty()
   @IsBoolean()
   @Column({
     default: false,
   })
   hidden: boolean;
 
-  @IsNotEmpty()
   @IsPositive()
-  @Min(0)
   @IsNumber({
     allowNaN: false,
     allowInfinity: false,
@@ -42,11 +33,11 @@ export class Offer extends WithIdAndDates {
   })
   amount: number;
 
-  @Column()
   @ManyToOne(() => Wish, (wish) => wish.offers)
+  @Column()
   item: Wish;
 
-  @Column()
   @ManyToOne(() => User, (user) => user.offers)
+  @Column()
   user: User;
 }

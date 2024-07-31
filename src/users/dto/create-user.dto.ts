@@ -1,7 +1,6 @@
 // decorators
 import {
   IsStrongPassword,
-  IsNotEmpty,
   NotEquals,
   IsEmail,
   Length,
@@ -19,13 +18,11 @@ import {
 // content
 
 export class CreateUserDto {
-  @IsNotEmpty()
   @IsEmail({
     allow_utf8_local_part: false,
   })
   email: string;
 
-  @IsNotEmpty()
   @IsStrongPassword({
     minLength: 8,
     minLowercase: 1,
@@ -35,7 +32,6 @@ export class CreateUserDto {
   })
   password: string;
 
-  @IsNotEmpty()
   @NotEquals('me')
   @NotEquals('admin')
   @Length(MIN_USERNAME_LENGTH, MAX_USERNAME_LENGTH)
