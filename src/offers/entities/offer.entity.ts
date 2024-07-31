@@ -33,10 +33,10 @@ export class Offer extends WithIdAndDates {
   amount: number;
 
   @Column()
-  @ManyToOne(() => User, (user) => user.offers)
-  user: User;
-
-  @Column()
   @ManyToOne(() => Wish, (wish) => wish.offers)
   item: Wish;
+
+  @Column()
+  @ManyToOne(() => User, (user) => user.offers)
+  user: User;
 }
