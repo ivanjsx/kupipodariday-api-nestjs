@@ -1,5 +1,5 @@
 // decorators
-import { IsString, IsUrl, Length } from 'class-validator';
+import { IsUrl, Length } from 'class-validator';
 import { Column, Entity, JoinColumn, ManyToMany, ManyToOne } from 'typeorm';
 
 // entities
@@ -21,7 +21,6 @@ import {
 
 @Entity()
 export class Wishlist extends WithIdAndDates {
-  @IsString()
   @Length(MIN_WISHLIST_NAME_LENGTH, MAX_WISHLIST_NAME_LENGTH)
   @Column({
     length: MAX_WISHLIST_NAME_LENGTH,
@@ -34,19 +33,20 @@ export class Wishlist extends WithIdAndDates {
   @Column()
   image: string;
 
-  @IsString()
   @Length(MIN_WISHLIST_DESCRIPTION_LENGTH, MAX_WISHLIST_DESCRIPTION_LENGTH)
   @Column({
     length: MAX_WISHLIST_DESCRIPTION_LENGTH,
   })
   description: string;
 
-  @Column()
   @ManyToOne(() => User, (user) => user.wishlists)
+  @Column()
   author: User;
 
-  @Column()
   @ManyToMany(() => Wish, (wish) => wish.lists)
   @JoinColumn()
+  @Column({
+    array: true,
+  })
   items: Array<Wish>;
 }

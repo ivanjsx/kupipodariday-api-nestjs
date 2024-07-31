@@ -1,5 +1,5 @@
 // decorators
-import { IsNumber, IsString, IsUrl, Length } from 'class-validator';
+import { IsNumber, IsUrl, Length, Min } from 'class-validator';
 import { ManyToMany, ManyToOne, OneToMany, Entity, Column } from 'typeorm';
 
 // entities
@@ -23,7 +23,6 @@ import {
 
 @Entity()
 export class Wish extends WithIdAndDates {
-  @IsString()
   @Length(MIN_WISH_NAME_LENGTH, MAX_WISH_NAME_LENGTH)
   @Column({
     length: MAX_WISH_NAME_LENGTH,
@@ -42,6 +41,7 @@ export class Wish extends WithIdAndDates {
   @Column()
   image: string;
 
+  @Min(0)
   @IsNumber({
     allowNaN: false,
     allowInfinity: false,
@@ -52,13 +52,13 @@ export class Wish extends WithIdAndDates {
   })
   price: number;
 
-  @IsString()
   @Length(MIN_WISH_DESCRIPTION_LENGTH, MAX_WISH_DESCRIPTION_LENGTH)
   @Column({
     length: MAX_WISH_DESCRIPTION_LENGTH,
   })
   description: string;
 
+  @Min(0)
   @IsNumber({
     allowNaN: false,
     allowInfinity: false,
@@ -69,6 +69,7 @@ export class Wish extends WithIdAndDates {
   })
   raised: number;
 
+  @Min(0)
   @IsNumber({
     allowNaN: false,
     allowInfinity: false,
@@ -79,15 +80,19 @@ export class Wish extends WithIdAndDates {
   })
   copied: number;
 
-  @Column()
   @ManyToOne(() => User, (user) => user.wishes)
+  @Column()
   owner: User;
 
-  @Column()
   @OneToMany(() => Offer, (offer) => offer.item)
+  @Column({
+    array: true,
+  })
   offers: Array<Offer>;
 
-  @Column()
   @ManyToMany(() => Wishlist, (wishlist) => wishlist.items)
+  @Column({
+    array: true,
+  })
   lists: Array<Wishlist>;
 }
