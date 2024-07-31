@@ -1,42 +1,71 @@
+// decorators
 import {
+  ParseIntPipe,
   Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
   Param,
+  Get,
+  Patch,
+  Body,
   Delete,
+  Post,
 } from '@nestjs/common';
+
+// providers
 import { WishesService } from './wishes.service';
+
+// entities
+import { Wish } from './entities/wish.entity';
+
+// data transfer objects
 import { CreateWishDto } from './dto/create-wish.dto';
 import { UpdateWishDto } from './dto/update-wish.dto';
+
+// constants
+import { LAST_WISHES_LIMIT, TOP_WISHES_LIMIT } from 'src/utils/constants';
+
+// content
 
 @Controller('wishes')
 export class WishesController {
   constructor(private readonly wishesService: WishesService) {}
 
   @Post()
-  create(@Body() createWishDto: CreateWishDto) {
-    return this.wishesService.create(createWishDto);
-  }
-
-  @Get()
-  findAll() {
-    return this.wishesService.findAll();
+  createOne(@Body() data: CreateWishDto): Promise<Wish> {
+    return this.wishesService.createOne(data);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.wishesService.findOne(+id);
+  findOne(@Param('id', ParseIntPipe) id: number): Promise<Wish> {
+    return this.wishesService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateWishDto: UpdateWishDto) {
-    return this.wishesService.update(+id, updateWishDto);
+  updateOne(
+    @Body() data: UpdateWishDto,
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<Wish> {
+    return this.wishesService.updateOne(id, data);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.wishesService.remove(+id);
+  removeOne(@Param('id', ParseIntPipe) id: number): Promise<Wish> {
+    return this.wishesService.removeOne(id);
+  }
+
+  @Post(':id/copy')
+  copyOne(@Param('id', ParseIntPipe) id: number): Promise<Wish> {
+    return this.wishesService.copyOne(id);
+  }
+
+  @Get('last')
+  findLast(): Promise<Array<Wish>> {
+    const limit = LAST_WISHES_LIMIT; // might as well parse from query params
+    return this.wishesService.findLast(limit);
+  }
+
+  @Get('top')
+  findTop(): Promise<Array<Wish>> {
+    const limit = TOP_WISHES_LIMIT; // might as well parse from query params
+    return this.wishesService.findTop(limit);
   }
 }
