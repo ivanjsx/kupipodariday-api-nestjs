@@ -1,5 +1,6 @@
 // decorators
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 
 // providers
 import { Repository } from 'typeorm';
@@ -15,7 +16,10 @@ import { UpdateWishlistDto } from './dto/update-wishlist.dto';
 
 @Injectable()
 export class WishlistsService {
-  constructor(private readonly wishlistsRepository: Repository<Wishlist>) {}
+  constructor(
+    @InjectRepository(Wishlist)
+    private readonly wishlistsRepository: Repository<Wishlist>,
+  ) {}
 
   async createOne(data: CreateWishlistDto): Promise<Wishlist> {
     const insertResult = await this.wishlistsRepository.insert(data);

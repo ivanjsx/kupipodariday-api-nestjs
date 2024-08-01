@@ -1,5 +1,6 @@
 // decorators
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 
 // providers
 import { Repository } from 'typeorm';
@@ -15,7 +16,10 @@ import { SearchUserDto } from './dto/search-user.dto';
 
 @Injectable()
 export class UsersService {
-  constructor(private readonly usersRepository: Repository<User>) {}
+  constructor(
+    @InjectRepository(User)
+    private readonly usersRepository: Repository<User>,
+  ) {}
 
   findOne(username: string): Promise<User> {
     return this.usersRepository.findOneByOrFail({ username });

@@ -1,5 +1,6 @@
 // decorators
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 
 // providers
 import { Repository } from 'typeorm';
@@ -14,18 +15,21 @@ import { CreateOfferDto } from './dto/create-offer.dto';
 
 @Injectable()
 export class OffersService {
-  constructor(private readonly wishesRepository: Repository<Offer>) {}
+  constructor(
+    @InjectRepository(Offer)
+    private readonly offersRepository: Repository<Offer>,
+  ) {}
 
   async createOne(data: CreateOfferDto): Promise<Offer> {
-    const insertResult = await this.wishesRepository.insert(data);
+    const insertResult = await this.offersRepository.insert(data);
     return insertResult.generatedMaps[0] as Offer;
   }
 
   findAll() {
-    return this.wishesRepository.find();
+    return this.offersRepository.find();
   }
 
   findOne(id: number): Promise<Offer> {
-    return this.wishesRepository.findOneByOrFail({ id });
+    return this.offersRepository.findOneByOrFail({ id });
   }
 }
