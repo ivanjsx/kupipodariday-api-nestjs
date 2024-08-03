@@ -1,5 +1,5 @@
 // libraries
-import bcrypt from 'bcryptjs';
+import * as bcrypt from 'bcryptjs';
 
 // decorators
 import { ConflictException, Injectable, UseInterceptors } from '@nestjs/common';
