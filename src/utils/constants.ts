@@ -7,6 +7,8 @@ export enum Direction {
   DESC = 'DESC',
 }
 
+export const JWT_SECRET_PROPERTY_PATH = 'JWT_SECRET';
+
 // users module
 
 export const MIN_USERNAME_LENGTH = 2;
