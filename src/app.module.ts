@@ -11,11 +11,8 @@ import { WishlistsModule } from './wishlists/wishlists.module';
 // orm modules
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-// entities
-import { User } from './users/entities/user.entity';
-import { Wish } from './wishes/entities/wish.entity';
-import { Offer } from './offers/entities/offer.entity';
-import { Wishlist } from './wishlists/entities/wishlist.entity';
+// environment modules
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 // content
 
@@ -26,16 +23,24 @@ import { Wishlist } from './wishlists/entities/wishlist.entity';
     WishesModule,
     OffersModule,
     WishlistsModule,
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: 'student',
-      password: 'student',
-      database: 'kupipodariday',
-      schema: 'public',
-      entities: [User, Wish, Offer, Wishlist],
-      synchronize: true,
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService) => ({
+        type: 'postgres',
+        useUTC: true,
+        synchronize: true,
+        autoLoadEntities: true,
+        host: configService.get<string>('DATABASE_HOST'),
+        port: configService.get<number>('DATABASE_PORT'),
+        username: configService.get<string>('DATABASE_USERNAME'),
+        password: configService.get<string>('DATABASE_PASSWORD'),
+        database: configService.get<string>('DATABASE_NAME'),
+        schema: configService.get<string>('DATABASE_SCHEMA'),
+      }),
     }),
   ],
 })
