@@ -8,10 +8,14 @@ import {
   Body,
   Post,
   Get,
+  UseGuards,
 } from '@nestjs/common';
 
 // providers
 import { WishlistsService } from './wishlists.service';
+
+// guards
+import { JwtAuthGuard } from 'src/auth/jwt/jwt.guard';
 
 // entities
 import { Wishlist } from './wishlist.entity';
@@ -23,6 +27,7 @@ import { UpdateWishlistDto } from './dto/update-wishlist.dto';
 // content
 
 @Controller('wishlists')
+@UseGuards(JwtAuthGuard)
 export class WishlistsController {
   constructor(private readonly wishlistsService: WishlistsService) {}
 

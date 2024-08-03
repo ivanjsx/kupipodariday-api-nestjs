@@ -1,11 +1,20 @@
-// libraries
-import { Request } from 'express';
-
 // decorators
-import { Controller, Patch, Param, Post, Body, Get, Req } from '@nestjs/common';
+import {
+  Controller,
+  UseGuards,
+  Patch,
+  Param,
+  Post,
+  Body,
+  Get,
+  Req,
+} from '@nestjs/common';
 
 // providers
 import { UsersService } from './users.service';
+
+// guards
+import { JwtAuthGuard } from 'src/auth/jwt/jwt.guard';
 
 // entities
 import { User } from './user.entity';
@@ -21,6 +30,7 @@ import { AuthenticatedRequest } from 'src/utils/types';
 // content
 
 @Controller('users')
+@UseGuards(JwtAuthGuard)
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 

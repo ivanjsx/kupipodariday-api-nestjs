@@ -8,10 +8,14 @@ import {
   Body,
   Post,
   Get,
+  UseGuards,
 } from '@nestjs/common';
 
 // providers
 import { WishesService } from './wishes.service';
+
+// guards
+import { JwtAuthGuard } from 'src/auth/jwt/jwt.guard';
 
 // entities
 import { Wish } from './wish.entity';
@@ -30,16 +34,19 @@ export class WishesController {
   constructor(private readonly wishesService: WishesService) {}
 
   @Post()
+  @UseGuards(JwtAuthGuard)
   createOne(@Body() data: CreateWishDto): Promise<Wish> {
     return this.wishesService.createOne(data);
   }
 
   @Get(':id')
+  @UseGuards(JwtAuthGuard)
   findOne(@Param('id', ParseIntPipe) id: number): Promise<Wish> {
     return this.wishesService.findOne(id);
   }
 
   @Patch(':id')
+  @UseGuards(JwtAuthGuard)
   updateOne(
     @Body() data: UpdateWishDto,
     @Param('id', ParseIntPipe) id: number,
@@ -48,11 +55,13 @@ export class WishesController {
   }
 
   @Delete(':id')
+  @UseGuards(JwtAuthGuard)
   removeOne(@Param('id', ParseIntPipe) id: number): Promise<Wish> {
     return this.wishesService.removeOne(id);
   }
 
   @Post(':id/copy')
+  @UseGuards(JwtAuthGuard)
   copyOne(@Param('id', ParseIntPipe) id: number): Promise<Wish> {
     return this.wishesService.copyOne(id);
   }

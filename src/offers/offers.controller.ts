@@ -6,10 +6,14 @@ import {
   Body,
   Post,
   Get,
+  UseGuards,
 } from '@nestjs/common';
 
 // providers
 import { OffersService } from './offers.service';
+
+// guards
+import { JwtAuthGuard } from 'src/auth/jwt/jwt.guard';
 
 // entities
 import { Offer } from './offer.entity';
@@ -20,6 +24,7 @@ import { CreateOfferDto } from './dto/create-offer.dto';
 // content
 
 @Controller('offers')
+@UseGuards(JwtAuthGuard)
 export class OffersController {
   constructor(private readonly offersService: OffersService) {}
 
