@@ -42,20 +42,25 @@ export class UsersService {
     });
   }
 
+  async ensureNotExists(email: string, username: string): Promise<void> {
+    const exists = await this.usersRepository.existsBy([
+      { email },
+      { username },
+    ]);
+    if (exists) {
+      throw new ConflictException(USER_ALREADY_EXISTS);
+    }
+  }
+
   @UseInterceptors(HidePassword)
   async createOne(data: CreateUserDto): Promise<User> {
-    const hash = await bcrypt.hash(data.password, 10);
-    try {
-      const insertResult = await this.usersRepository.insert({
-        ...data,
-        password: hash,
-      });
-      return insertResult.generatedMaps[0] as User;
-    } catch (error) {
-      if (error.code === '23505') {
-        throw new ConflictException(USER_ALREADY_EXISTS);
-      }
-    }
+    await this.ensureNotExists(data.email, data.username);
+    const hash = await bcrypt.hash(data.password, 12);
+    const insertResult = await this.usersRepository.insert({
+      ...data,
+      password: hash,
+    });
+    return insertResult.generatedMaps[0] as User;
   }
 
   async updateOne(username: string, data: UpdateUserDto): Promise<User> {
