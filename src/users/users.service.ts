@@ -1,5 +1,8 @@
+// libraries
+import bcrypt from 'bcryptjs';
+
 // decorators
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
 // providers
@@ -9,8 +12,12 @@ import { Repository } from 'typeorm';
 import { User } from './user.entity';
 
 // data transfer objects
+import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { SearchUserDto } from './dto/search-user.dto';
+
+// constants
+import { USER_ALREADY_EXISTS } from 'src/utils/error-messages';
 
 // content
 
@@ -30,6 +37,21 @@ export class UsersService {
       where: { username },
       relations: ['wishes'],
     });
+  }
+
+  async createOne(data: CreateUserDto): Promise<User> {
+    const hash = await bcrypt.hash(data.password, 10);
+    try {
+      const insertResult = await this.usersRepository.insert({
+        ...data,
+        password: hash,
+      });
+      return insertResult.generatedMaps[0] as User;
+    } catch (error) {
+      if (error.code === '23505') {
+        throw new ConflictException(USER_ALREADY_EXISTS);
+      }
+    }
   }
 
   async updateOne(username: string, data: UpdateUserDto): Promise<User> {
