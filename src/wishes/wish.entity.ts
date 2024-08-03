@@ -10,12 +10,12 @@ import {
 import { ManyToMany, ManyToOne, OneToMany, Entity, Column } from 'typeorm';
 
 // entities
-import { User } from 'src/users/entities/user.entity';
-import { Offer } from 'src/offers/entities/offer.entity';
-import { Wishlist } from 'src/wishlists/entities/wishlist.entity';
+import { User } from 'src/users/user.entity';
+import { Offer } from 'src/offers/offer.entity';
+import { Wishlist } from 'src/wishlists/wishlist.entity';
 
 // utils
-import { WithIdAndDates } from 'src/utils/entities/with-id-and-dates';
+import { WithIdAndDates } from 'src/utils/entities';
 
 // constants
 import {
@@ -55,6 +55,7 @@ export class Wish extends WithIdAndDates {
     maxDecimalPlaces: MONEY_DECIMAL_PLACES,
   })
   @Column({
+    type: 'decimal',
     scale: MONEY_DECIMAL_PLACES,
   })
   price: number;
@@ -72,6 +73,7 @@ export class Wish extends WithIdAndDates {
     maxDecimalPlaces: MONEY_DECIMAL_PLACES,
   })
   @Column({
+    type: 'decimal',
     scale: MONEY_DECIMAL_PLACES,
   })
   raised: number;
@@ -84,18 +86,11 @@ export class Wish extends WithIdAndDates {
   copied: number;
 
   @ManyToOne(() => User, (user) => user.wishes)
-  @Column()
   owner: User;
 
   @OneToMany(() => Offer, (offer) => offer.item)
-  @Column({
-    array: true,
-  })
   offers: Array<Offer>;
 
   @ManyToMany(() => Wishlist, (wishlist) => wishlist.items)
-  @Column({
-    array: true,
-  })
   lists: Array<Wishlist>;
 }

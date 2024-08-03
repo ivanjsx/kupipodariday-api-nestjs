@@ -1,14 +1,15 @@
 // decorators
 import { Column, Entity, OneToMany } from 'typeorm';
-import { NotEquals, IsEmail, Length, IsHash, IsUrl } from 'class-validator';
+import { NotEquals, IsEmail, Length, IsUrl } from 'class-validator';
 
 // entities
-import { Wish } from 'src/wishes/entities/wish.entity';
-import { Offer } from 'src/offers/entities/offer.entity';
-import { Wishlist } from 'src/wishlists/entities/wishlist.entity';
+import { Wish } from 'src/wishes/wish.entity';
+import { Offer } from 'src/offers/offer.entity';
+import { Wishlist } from 'src/wishlists/wishlist.entity';
 
 // utils
-import { WithIdAndDates } from 'src/utils/entities/with-id-and-dates';
+import { IsBcryptHash } from 'src/utils/validators';
+import { WithIdAndDates } from 'src/utils/entities';
 
 // constants
 import {
@@ -32,7 +33,7 @@ export class User extends WithIdAndDates {
   })
   email: string;
 
-  @IsHash('sha256')
+  @IsBcryptHash()
   @Column({
     select: false,
   })
@@ -63,20 +64,11 @@ export class User extends WithIdAndDates {
   avatar: string;
 
   @OneToMany(() => Wish, (wish) => wish.owner)
-  @Column({
-    array: true,
-  })
   wishes: Array<Wish>;
 
   @OneToMany(() => Offer, (offer) => offer.user)
-  @Column({
-    array: true,
-  })
   offers: Array<Offer>;
 
   @OneToMany(() => Wishlist, (wishlist) => wishlist.author)
-  @Column({
-    array: true,
-  })
   wishlists: Array<Wishlist>;
 }

@@ -12,7 +12,7 @@ import {
 import { OffersService } from './offers.service';
 
 // entities
-import { Offer } from './entities/offer.entity';
+import { Offer } from './offer.entity';
 
 // data transfer objects
 import { CreateOfferDto } from './dto/create-offer.dto';

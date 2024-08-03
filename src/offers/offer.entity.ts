@@ -3,11 +3,11 @@ import { Column, Entity, ManyToOne } from 'typeorm';
 import { IsBoolean, IsNumber, IsPositive } from 'class-validator';
 
 // entities
-import { User } from 'src/users/entities/user.entity';
-import { Wish } from 'src/wishes/entities/wish.entity';
+import { User } from 'src/users/user.entity';
+import { Wish } from 'src/wishes/wish.entity';
 
 // utils
-import { WithIdAndDates } from 'src/utils/entities/with-id-and-dates';
+import { WithIdAndDates } from 'src/utils/entities';
 
 // constants
 import { MONEY_DECIMAL_PLACES } from 'src/utils/constants';
@@ -29,15 +29,14 @@ export class Offer extends WithIdAndDates {
     maxDecimalPlaces: MONEY_DECIMAL_PLACES,
   })
   @Column({
+    type: 'decimal',
     scale: MONEY_DECIMAL_PLACES,
   })
   amount: number;
 
   @ManyToOne(() => Wish, (wish) => wish.offers)
-  @Column()
   item: Wish;
 
   @ManyToOne(() => User, (user) => user.offers)
-  @Column()
   user: User;
 }

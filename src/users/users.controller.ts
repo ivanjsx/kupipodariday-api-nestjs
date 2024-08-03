@@ -8,12 +8,15 @@ import { Controller, Patch, Param, Post, Body, Get, Req } from '@nestjs/common';
 import { UsersService } from './users.service';
 
 // entities
-import { User } from './entities/user.entity';
-import { Wish } from 'src/wishes/entities/wish.entity';
+import { User } from './user.entity';
+import { Wish } from 'src/wishes/wish.entity';
 
 // data transfer objects
 import { UpdateUserDto } from './dto/update-user.dto';
 import { SearchUserDto } from './dto/search-user.dto';
+
+// types
+import { AuthenticatedRequest } from 'src/utils/types';
 
 // content
 
@@ -35,20 +38,22 @@ export class UsersController {
   }
 
   @Get('me')
-  findMe(@Req() request: Request): Promise<User> {
+  findMe(@Req() request: AuthenticatedRequest): Promise<User> {
     return this.usersService.findOne(request.user.username);
   }
 
   @Patch('me')
   updateMe(
-    @Req() request: Request,
+    @Req() request: AuthenticatedRequest,
     @Body() data: UpdateUserDto,
   ): Promise<User> {
     return this.usersService.updateOne(request.user.username, data);
   }
 
   @Get('me/wishes')
-  async findMyWishes(@Req() request: Request): Promise<Array<Wish>> {
+  async findMyWishes(
+    @Req() request: AuthenticatedRequest,
+  ): Promise<Array<Wish>> {
     const me = await this.usersService.findOneWithWishes(request.user.username);
     return me.wishes;
   }

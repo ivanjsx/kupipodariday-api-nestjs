@@ -6,7 +6,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
 // entities
-import { User } from './entities/user.entity';
+import { User } from './user.entity';
 
 // data transfer objects
 import { UpdateUserDto } from './dto/update-user.dto';

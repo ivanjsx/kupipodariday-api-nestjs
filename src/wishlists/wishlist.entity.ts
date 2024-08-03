@@ -3,11 +3,11 @@ import { IsUrl, Length } from 'class-validator';
 import { Column, Entity, JoinColumn, ManyToMany, ManyToOne } from 'typeorm';
 
 // entities
-import { User } from 'src/users/entities/user.entity';
-import { Wish } from 'src/wishes/entities/wish.entity';
+import { User } from 'src/users/user.entity';
+import { Wish } from 'src/wishes/wish.entity';
 
 // utils
-import { WithIdAndDates } from 'src/utils/entities/with-id-and-dates';
+import { WithIdAndDates } from 'src/utils/entities';
 
 // constants
 import {
@@ -40,13 +40,9 @@ export class Wishlist extends WithIdAndDates {
   description: string;
 
   @ManyToOne(() => User, (user) => user.wishlists)
-  @Column()
   author: User;
 
   @ManyToMany(() => Wish, (wish) => wish.lists)
   @JoinColumn()
-  @Column({
-    array: true,
-  })
   items: Array<Wish>;
 }

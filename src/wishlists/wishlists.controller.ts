@@ -14,7 +14,7 @@ import {
 import { WishlistsService } from './wishlists.service';
 
 // entities
-import { Wishlist } from './entities/wishlist.entity';
+import { Wishlist } from './wishlist.entity';
 
 // data transfer objects
 import { CreateWishlistDto } from './dto/create-wishlist.dto';

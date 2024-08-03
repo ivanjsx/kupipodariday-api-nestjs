@@ -5,7 +5,7 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 // entities
-import { Wishlist } from './entities/wishlist.entity';
+import { Wishlist } from './wishlist.entity';
 
 // controllers
 import { WishlistsController } from './wishlists.controller';
