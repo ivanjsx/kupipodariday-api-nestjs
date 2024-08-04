@@ -6,14 +6,14 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
 // entities
-import { Wish } from './wish.entity';
+import { Wish } from './wishes.entities';
 
 // data transfer objects
 import { CreateWishDto } from './dto/create-wish.dto';
 import { UpdateWishDto } from './dto/update-wish.dto';
 
 // constants
-import { Direction } from 'src/utils/constants';
+import { Direction } from 'src/utils/common-constants';
 
 // content
 

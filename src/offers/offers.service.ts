@@ -6,7 +6,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
 // entities
-import { Offer } from './offer.entity';
+import { Offer } from './offers.entities';
 
 // data transfer objects
 import { CreateOfferDto } from './dto/create-offer.dto';

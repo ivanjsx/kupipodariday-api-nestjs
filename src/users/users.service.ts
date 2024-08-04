@@ -2,17 +2,18 @@
 import * as bcrypt from 'bcryptjs';
 
 // decorators
-import { ConflictException, Injectable, UseInterceptors } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import {
+  ConflictException,
+  NotFoundException,
+  Injectable,
+} from '@nestjs/common';
 
 // providers
-import { Repository } from 'typeorm';
-
-// interceptors
-import { HidePassword } from 'src/utils/interceptors';
+import { EntityNotFoundError, Repository } from 'typeorm';
 
 // entities
-import { User } from './user.entity';
+import { User } from './users.entities';
 
 // data transfer objects
 import { CreateUserDto } from './dto/create-user.dto';
@@ -52,7 +53,6 @@ export class UsersService {
     }
   }
 
-  @UseInterceptors(HidePassword)
   async createOne(data: CreateUserDto): Promise<User> {
     await this.ensureNotExists(data.email, data.username);
     const hash = await bcrypt.hash(data.password, 12);

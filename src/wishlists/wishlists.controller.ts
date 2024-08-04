@@ -18,7 +18,7 @@ import { WishlistsService } from './wishlists.service';
 import { JwtAuthGuard } from 'src/auth/jwt/jwt.guard';
 
 // entities
-import { Wishlist } from './wishlist.entity';
+import { Wishlist } from './wishlists.entities';
 
 // data transfer objects
 import { CreateWishlistDto } from './dto/create-wishlist.dto';

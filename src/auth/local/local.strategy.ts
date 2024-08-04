@@ -1,5 +1,5 @@
 // libraries
-import bcrypt from 'bcryptjs';
+import * as bcrypt from 'bcryptjs';
 import { Strategy } from 'passport-local';
 import { PassportStrategy } from '@nestjs/passport';
 

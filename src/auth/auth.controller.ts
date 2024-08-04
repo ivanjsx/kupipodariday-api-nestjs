@@ -9,13 +9,14 @@ import { UsersService } from 'src/users/users.service';
 import { LocalAuthGuard } from './local/local.guard';
 
 // entities
-import { User } from 'src/users/user.entity';
+import { User } from 'src/users/users.entities';
 
 // data transfer objects
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 
 // types
-import { AccessTokenResponse, AuthenticatedRequest } from 'src/utils/types';
+import { AccessTokenResponse } from './auth.types';
+import { AuthenticatedRequest } from 'src/utils/common-types';
 
 // content
 

@@ -10,10 +10,13 @@ import { ConfigService } from '@nestjs/config';
 import { UsersService } from 'src/users/users.service';
 
 // entities
-import { User } from 'src/users/user.entity';
+import { User } from 'src/users/users.entities';
 
 // constants
-import { JWT_SECRET_PROPERTY_PATH } from 'src/utils/constants';
+import { JWT_SECRET_PROPERTY_PATH } from '../auth.constants';
+
+// types
+import { JwtPayload } from '../auth.types';
 
 // content
 
@@ -30,7 +33,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  async validate(jwtPayload: { subject: string }): Promise<User> {
+  async validate(jwtPayload: JwtPayload): Promise<User> {
     try {
       const user = await this.usersService.findOne(jwtPayload.subject);
       return user;

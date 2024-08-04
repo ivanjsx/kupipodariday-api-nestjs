@@ -18,14 +18,14 @@ import { WishesService } from './wishes.service';
 import { JwtAuthGuard } from 'src/auth/jwt/jwt.guard';
 
 // entities
-import { Wish } from './wish.entity';
+import { Wish } from './wishes.entities';
 
 // data transfer objects
 import { CreateWishDto } from './dto/create-wish.dto';
 import { UpdateWishDto } from './dto/update-wish.dto';
 
 // constants
-import { LAST_WISHES_LIMIT, TOP_WISHES_LIMIT } from 'src/utils/constants';
+import { LAST_WISHES_LIMIT, TOP_WISHES_LIMIT } from './wishes.constants';
 
 // content
 

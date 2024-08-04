@@ -18,7 +18,7 @@ import { JwtStrategy } from './jwt/jwt.strategy';
 import { LocalStrategy } from './local/local.strategy';
 
 // constants
-import { JWT_SECRET_PROPERTY_PATH } from 'src/utils/constants';
+import { JWT_SECRET_PROPERTY_PATH } from './auth.constants';
 
 // content
 

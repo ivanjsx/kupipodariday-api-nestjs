@@ -5,10 +5,10 @@ import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 
 // entities
-import { User } from 'src/users/user.entity';
+import { User } from 'src/users/users.entities';
 
 // types
-import { AccessTokenResponse } from 'src/utils/types';
+import { JwtPayload, AccessTokenResponse } from './auth.types';
 
 // content
 
@@ -17,7 +17,7 @@ export class AuthService {
   constructor(private readonly jwtService: JwtService) {}
 
   authenticate(user: User): AccessTokenResponse {
-    const payload = { subject: user.username };
+    const payload: JwtPayload = { subject: user.username };
     return { access_token: this.jwtService.sign(payload) };
   }
 }

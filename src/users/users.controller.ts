@@ -17,15 +17,15 @@ import { UsersService } from './users.service';
 import { JwtAuthGuard } from 'src/auth/jwt/jwt.guard';
 
 // entities
-import { User } from './user.entity';
-import { Wish } from 'src/wishes/wish.entity';
+import { User } from './users.entities';
+import { Wish } from 'src/wishes/wishes.entities';
 
 // data transfer objects
 import { UpdateUserDto } from './dto/update-user.dto';
 import { SearchUserDto } from './dto/search-user.dto';
 
 // types
-import { AuthenticatedRequest } from 'src/utils/types';
+import { AuthenticatedRequest } from 'src/utils/common-types';
 
 // content
 

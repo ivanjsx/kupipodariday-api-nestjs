@@ -6,7 +6,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
 // entities
-import { Wishlist } from './wishlist.entity';
+import { Wishlist } from './wishlists.entities';
 
 // data transfer objects
 import { CreateWishlistDto } from './dto/create-wishlist.dto';

@@ -16,7 +16,7 @@ import { OffersService } from './offers.service';
 import { JwtAuthGuard } from 'src/auth/jwt/jwt.guard';
 
 // entities
-import { Offer } from './offer.entity';
+import { Offer } from './offers.entities';
 
 // data transfer objects
 import { CreateOfferDto } from './dto/create-offer.dto';
