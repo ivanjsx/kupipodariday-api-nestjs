@@ -10,10 +10,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { UsersService } from 'src/users/users.service';
 
 // entities
-import { User } from 'src/users/user.entity';
-
-// data transfer objects
-import { LoginUserDto } from 'src/users/dto/login-user.dto';
+import { User } from 'src/users/users.entities';
 
 // constants
 import { INCORRECT_CREDENTIALS } from 'src/utils/error-messages';
@@ -26,17 +23,15 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
     super();
   }
 
-  async validate(data: LoginUserDto): Promise<User> {
-    try {
-      const user = await this.usersService.findOne(data.username);
-      const match = await bcrypt.compare(data.password, user.password);
-      if (match) {
-        // TODO remove password from user object
-        return user;
-      }
-      throw new UnauthorizedException(INCORRECT_CREDENTIALS);
-    } catch (error) {
+  async validate(username: string, password: string): Promise<User> {
+    const user = await this.usersService.getUser(username, false, ['password']);
+    if (!user) {
       throw new UnauthorizedException(INCORRECT_CREDENTIALS);
     }
+    const match = await bcrypt.compare(password, user.password);
+    if (!match) {
+      throw new UnauthorizedException(INCORRECT_CREDENTIALS);
+    }
+    return user;
   }
 }

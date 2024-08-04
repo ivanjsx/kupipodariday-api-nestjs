@@ -21,7 +21,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { SearchUserDto } from './dto/search-user.dto';
 
 // constants
-import { USER_ALREADY_EXISTS } from 'src/utils/error-messages';
+import { USER_ALREADY_EXISTS, USER_NOT_FOUND } from 'src/utils/error-messages';
 
 // content
 
@@ -32,15 +32,28 @@ export class UsersService {
     private readonly usersRepository: Repository<User>,
   ) {}
 
-  findOne(username: string): Promise<User> {
-    return this.usersRepository.findOneByOrFail({ username });
-  }
-
-  findOneWithWishes(username: string): Promise<User> {
-    return this.usersRepository.findOneOrFail({
+  getUser(
+    username: string,
+    fire404 = false,
+    fields: Array<keyof User> = undefined,
+    join: Array<keyof User> = undefined,
+  ): Promise<User> {
+    const options = {
       where: { username },
-      relations: ['wishes'],
-    });
+      select: fields,
+      relations: join,
+    };
+    if (!fire404) {
+      return this.usersRepository.findOne(options);
+    }
+    try {
+      return this.usersRepository.findOneOrFail(options);
+    } catch (error) {
+      if (error instanceof EntityNotFoundError) {
+        throw new NotFoundException(USER_NOT_FOUND);
+      }
+      throw error;
+    }
   }
 
   async ensureNotExists(email: string, username: string): Promise<void> {
@@ -56,19 +69,18 @@ export class UsersService {
   async createOne(data: CreateUserDto): Promise<User> {
     await this.ensureNotExists(data.email, data.username);
     const hash = await bcrypt.hash(data.password, 12);
-    const insertResult = await this.usersRepository.insert({
+    return this.usersRepository.save({
       ...data,
       password: hash,
     });
-    return insertResult.generatedMaps[0] as User;
   }
 
   async updateOne(username: string, data: UpdateUserDto): Promise<User> {
-    const user = await this.findOne(username);
+    const user = await this.getUser(username, true);
     return this.usersRepository.save({ ...user, ...data });
   }
 
-  findMany(data: SearchUserDto): Promise<Array<User>> {
+  searchMany(data: SearchUserDto): Promise<Array<User>> {
     const { query } = data;
     return this.usersRepository.find({
       where: [{ email: query }, { username: query }],

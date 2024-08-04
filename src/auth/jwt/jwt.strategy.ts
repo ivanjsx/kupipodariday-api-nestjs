@@ -13,6 +13,7 @@ import { UsersService } from 'src/users/users.service';
 import { User } from 'src/users/users.entities';
 
 // constants
+import { INVALID_TOKEN } from 'src/utils/error-messages';
 import { JWT_SECRET_PROPERTY_PATH } from '../auth.constants';
 
 // types
@@ -34,11 +35,10 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(jwtPayload: JwtPayload): Promise<User> {
-    try {
-      const user = await this.usersService.findOne(jwtPayload.subject);
-      return user;
-    } catch (error) {
-      throw new UnauthorizedException();
+    const user = await this.usersService.getUser(jwtPayload.subject);
+    if (!user) {
+      throw new UnauthorizedException(INVALID_TOKEN);
     }
+    return user;
   }
 }

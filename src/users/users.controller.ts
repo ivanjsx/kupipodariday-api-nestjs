@@ -36,26 +36,31 @@ export class UsersController {
 
   @Get(':username')
   findOne(@Param('username') username: string): Promise<User> {
-    return this.usersService.findOne(username);
+    return this.usersService.getUser(username, true);
   }
 
   @Get(':username/wishes')
   async findOnesWishes(
     @Param('username') username: string,
   ): Promise<Array<Wish>> {
-    const user = await this.usersService.findOneWithWishes(username);
+    const user = await this.usersService.getUser(
+      username,
+      true,
+      ['wishes'],
+      ['wishes'],
+    );
     return user.wishes;
   }
 
   @Get('me')
   findMe(@Req() request: AuthenticatedRequest): Promise<User> {
-    return this.usersService.findOne(request.user.username);
+    return this.usersService.getUser(request.user.username, true);
   }
 
   @Patch('me')
   updateMe(
-    @Req() request: AuthenticatedRequest,
     @Body() data: UpdateUserDto,
+    @Req() request: AuthenticatedRequest,
   ): Promise<User> {
     return this.usersService.updateOne(request.user.username, data);
   }
@@ -64,12 +69,17 @@ export class UsersController {
   async findMyWishes(
     @Req() request: AuthenticatedRequest,
   ): Promise<Array<Wish>> {
-    const me = await this.usersService.findOneWithWishes(request.user.username);
+    const me = await this.usersService.getUser(
+      request.user.username,
+      true,
+      ['wishes'],
+      ['wishes'],
+    );
     return me.wishes;
   }
 
   @Post('find')
-  findMany(@Body() data: SearchUserDto): Promise<Array<User>> {
-    return this.usersService.findMany(data);
+  searchMany(@Body() data: SearchUserDto): Promise<Array<User>> {
+    return this.usersService.searchMany(data);
   }
 }
