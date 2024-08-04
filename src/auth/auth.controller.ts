@@ -1,5 +1,12 @@
 // decorators
-import { Body, Controller, Post, Req, UseGuards } from '@nestjs/common';
+import {
+  UseInterceptors,
+  Controller,
+  UseGuards,
+  Body,
+  Post,
+  Req,
+} from '@nestjs/common';
 
 // providers
 import { AuthService } from './auth.service';
@@ -7,6 +14,9 @@ import { UsersService } from 'src/users/users.service';
 
 // guards
 import { LocalAuthGuard } from './local/local.guard';
+
+// interceptors
+import { HidePassword } from './auth.interceptors';
 
 // entities
 import { User } from 'src/users/users.entities';
@@ -28,6 +38,7 @@ export class AuthController {
   ) {}
 
   @Post('signup')
+  @UseInterceptors(HidePassword)
   signUp(@Body() data: CreateUserDto): Promise<User> {
     return this.usersService.createOne(data);
   }
