@@ -32,7 +32,7 @@ export class UsersService {
     private readonly usersRepository: Repository<User>,
   ) {}
 
-  getUser(
+  async getUser(
     username: string,
     fire404 = false,
     fields: Array<keyof User> = undefined,
@@ -47,7 +47,8 @@ export class UsersService {
       return this.usersRepository.findOne(options);
     }
     try {
-      return this.usersRepository.findOneOrFail(options);
+      const user = await this.usersRepository.findOneOrFail(options);
+      return user;
     } catch (error) {
       if (error instanceof EntityNotFoundError) {
         throw new NotFoundException(USER_NOT_FOUND);
