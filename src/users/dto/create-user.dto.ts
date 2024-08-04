@@ -1,6 +1,7 @@
 // decorators
 import {
   IsStrongPassword,
+  IsOptional,
   NotEquals,
   IsEmail,
   Length,
@@ -13,7 +14,7 @@ import {
   MIN_USER_ABOUT_LENGTH,
   MAX_USERNAME_LENGTH,
   MIN_USERNAME_LENGTH,
-} from 'src/utils/constants';
+} from '../users.constants';
 
 // content
 
@@ -33,13 +34,14 @@ export class CreateUserDto {
   password: string;
 
   @NotEquals('me')
-  @NotEquals('admin')
   @Length(MIN_USERNAME_LENGTH, MAX_USERNAME_LENGTH)
   username: string;
 
+  @IsOptional()
   @Length(MIN_USER_ABOUT_LENGTH, MAX_USER_ABOUT_LENGTH)
   about?: string;
 
+  @IsOptional()
   @IsUrl({
     protocols: ['http', 'https'],
   })

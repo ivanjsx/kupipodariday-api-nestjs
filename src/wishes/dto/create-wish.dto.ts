@@ -2,13 +2,13 @@
 import { IsNumber, IsPositive, IsUrl, Length } from 'class-validator';
 
 // constants
+import { MONEY_DECIMAL_PLACES } from 'src/utils/common-constants';
 import {
   MIN_WISH_DESCRIPTION_LENGTH,
   MAX_WISH_DESCRIPTION_LENGTH,
   MIN_WISH_NAME_LENGTH,
   MAX_WISH_NAME_LENGTH,
-  MONEY_DECIMAL_PLACES,
-} from 'src/utils/constants';
+} from '../wishes.constants';
 
 // content
 

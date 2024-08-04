@@ -3,13 +3,12 @@ import { Column, Entity, OneToMany } from 'typeorm';
 import { NotEquals, IsEmail, Length, IsUrl } from 'class-validator';
 
 // entities
-import { Wish } from 'src/wishes/wish.entity';
-import { Offer } from 'src/offers/offer.entity';
-import { Wishlist } from 'src/wishlists/wishlist.entity';
+import { Wish } from 'src/wishes/wishes.entities';
+import { Offer } from 'src/offers/offers.entities';
+import { Wishlist } from 'src/wishlists/wishlists.entities';
 
 // utils
-import { IsBcryptHash } from 'src/utils/validators';
-import { WithIdAndDates } from 'src/utils/entities';
+import { WithIdAndDates } from 'src/utils/abstract-entities';
 
 // constants
 import {
@@ -19,7 +18,7 @@ import {
   MAX_USERNAME_LENGTH,
   DEFAULT_USER_AVATAR,
   DEFAULT_USER_ABOUT,
-} from 'src/utils/constants';
+} from './users.constants';
 
 // content
 
@@ -33,7 +32,6 @@ export class User extends WithIdAndDates {
   })
   email: string;
 
-  @IsBcryptHash()
   @Column({
     select: false,
   })

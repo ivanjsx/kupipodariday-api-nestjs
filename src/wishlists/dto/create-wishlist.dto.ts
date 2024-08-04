@@ -5,7 +5,7 @@ import { IsInt, IsPositive, IsUrl, Length } from 'class-validator';
 import {
   MIN_WISHLIST_NAME_LENGTH,
   MAX_WISHLIST_NAME_LENGTH,
-} from 'src/utils/constants';
+} from '../wishlists.constants';
 
 // content
 

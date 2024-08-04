@@ -10,21 +10,21 @@ import {
 import { ManyToMany, ManyToOne, OneToMany, Entity, Column } from 'typeorm';
 
 // entities
-import { User } from 'src/users/user.entity';
-import { Offer } from 'src/offers/offer.entity';
-import { Wishlist } from 'src/wishlists/wishlist.entity';
+import { User } from 'src/users/users.entities';
+import { Offer } from 'src/offers/offers.entities';
+import { Wishlist } from 'src/wishlists/wishlists.entities';
 
 // utils
-import { WithIdAndDates } from 'src/utils/entities';
+import { WithIdAndDates } from 'src/utils/abstract-entities';
 
 // constants
+import { MONEY_DECIMAL_PLACES } from 'src/utils/common-constants';
 import {
   MIN_WISH_DESCRIPTION_LENGTH,
   MAX_WISH_DESCRIPTION_LENGTH,
   MIN_WISH_NAME_LENGTH,
   MAX_WISH_NAME_LENGTH,
-  MONEY_DECIMAL_PLACES,
-} from 'src/utils/constants';
+} from './wishes.constants';
 
 // content
 

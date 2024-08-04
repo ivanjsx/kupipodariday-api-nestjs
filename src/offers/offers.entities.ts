@@ -3,14 +3,14 @@ import { Column, Entity, ManyToOne } from 'typeorm';
 import { IsBoolean, IsNumber, IsPositive } from 'class-validator';
 
 // entities
-import { User } from 'src/users/user.entity';
-import { Wish } from 'src/wishes/wish.entity';
+import { User } from 'src/users/users.entities';
+import { Wish } from 'src/wishes/wishes.entities';
 
 // utils
-import { WithIdAndDates } from 'src/utils/entities';
+import { WithIdAndDates } from 'src/utils/abstract-entities';
 
 // constants
-import { MONEY_DECIMAL_PLACES } from 'src/utils/constants';
+import { MONEY_DECIMAL_PLACES } from 'src/utils/common-constants';
 
 // content
 
