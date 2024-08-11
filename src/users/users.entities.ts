@@ -1,6 +1,6 @@
 // decorators
 import { Exclude } from 'class-transformer';
-import { Column, Entity, OneToMany } from 'typeorm';
+import { Check, Column, Entity, OneToMany, Unique } from 'typeorm';
 import { NotEquals, IsEmail, Length, IsUrl } from 'class-validator';
 
 // entities
@@ -25,6 +25,9 @@ import {
 // content
 
 @Entity()
+@Unique('email', ['email'])
+@Unique('username', ['username'])
+@Check(`"username" <> '${ME}'`)
 export class User extends WithIdAndDates {
   @IsEmail({
     allow_utf8_local_part: false,

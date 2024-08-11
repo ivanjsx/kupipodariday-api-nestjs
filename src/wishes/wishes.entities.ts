@@ -1,5 +1,12 @@
 // decorators
-import { ManyToMany, ManyToOne, OneToMany, Entity, Column } from 'typeorm';
+import {
+  ManyToMany,
+  ManyToOne,
+  OneToMany,
+  Entity,
+  Column,
+  Check,
+} from 'typeorm';
 import {
   IsPositive,
   IsNumber,
@@ -29,6 +36,7 @@ import {
 // content
 
 @Entity()
+@Check(`"raised" <= "price"`)
 export class Wish extends WithIdAndDates {
   @Length(MIN_WISH_NAME_LENGTH, MAX_WISH_NAME_LENGTH)
   @Column({
