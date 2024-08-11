@@ -1,7 +1,7 @@
 // libraries
 import 'reflect-metadata';
 import helmet from 'helmet';
-import { nestCsrf } from 'ncsrf';
+import * as csurf from 'csurf';
 import { NestFactory } from '@nestjs/core';
 import * as cookieParser from 'cookie-parser';
 import { ValidationPipe } from '@nestjs/common';
@@ -17,8 +17,8 @@ import { ConfigService } from '@nestjs/config';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  app.use(csurf());
   app.use(helmet());
-  app.use(nestCsrf());
   app.use(cookieParser());
 
   const validationPipe = new ValidationPipe({ transform: true });
