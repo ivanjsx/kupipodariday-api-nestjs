@@ -25,23 +25,33 @@ export class WishesService {
     private readonly wishesRepository: Repository<Wish>,
   ) {}
 
-  public async createOne(
-    data: CreateWishDto,
-    owner: User,
-    copiedFrom: Wish = undefined,
-  ): Promise<Wish> {
+  public async findLast(limit: number): Promise<Array<Wish>> {
+    return this.wishesRepository.find({
+      order: { createdAt: Direction.DESC },
+      take: limit,
+    });
+  }
+
+  public async findTop(limit: number): Promise<Array<Wish>> {
+    return this.wishesRepository.find({
+      order: { copied: Direction.DESC },
+      take: limit,
+    });
+  }
+
+  public async createOne(data: CreateWishDto, owner: User): Promise<Wish> {
     const wish = this.wishesRepository.create({
       ...data,
       owner,
     });
-    if (copiedFrom) {
-      wish.direct_copy_of = copiedFrom;
-    }
     return this.wishesRepository.save(wish);
   }
 
-  public async findByIdOr404(id: number): Promise<Wish> {
-    return this.wishesRepository.findOneByOrFail({ id });
+  public async findByIdOr404(id: number, withOrigins = false): Promise<Wish> {
+    const relations = withOrigins
+      ? { direct_copy_of: true, root_copy_of: true }
+      : undefined;
+    return this.wishesRepository.findOneOrFail({ where: { id }, relations });
   }
 
   public async updateOne(id: number, data: UpdateWishDto): Promise<Wish> {
@@ -55,27 +65,27 @@ export class WishesService {
   }
 
   public async copyOne(fromId: number, copycat: User): Promise<Wish> {
-    const wish = await this.findByIdOr404(fromId);
-    const copy: unknown = {};
-    Object.keys(CreateWishDto).forEach((key) => {
-      if (key in wish) {
-        copy[key] = wish[key];
-      }
-    });
-    return this.createOne(copy as CreateWishDto, copycat, wish);
-  }
+    const from = await this.findByIdOr404(fromId, true);
+    const { name, link, image, price, description } = from;
+    const data: CreateWishDto = { name, link, image, price, description };
 
-  public async findLast(limit: number): Promise<Array<Wish>> {
-    return this.wishesRepository.find({
-      order: { createdAt: Direction.DESC },
-      take: limit,
+    const to = this.wishesRepository.create({
+      ...data,
+      owner: copycat,
     });
-  }
 
-  public async findTop(limit: number): Promise<Array<Wish>> {
-    return this.wishesRepository.find({
-      order: { copied: Direction.DESC },
-      take: limit,
-    });
+    to.direct_copy_of = from;
+
+    if (from.root_copy_of) {
+      to.root_copy_of = from.root_copy_of;
+    } else {
+      to.root_copy_of = from;
+    }
+
+    from.copied += 1;
+
+    return this.wishesRepository
+      .save(from)
+      .then(() => this.wishesRepository.save(to));
   }
 }
