@@ -1,5 +1,7 @@
 // decorators
+import { CurrentlyAuthenticatedUser } from 'src/utils/decorators';
 import {
+  UseInterceptors,
   Controller,
   UseGuards,
   Patch,
@@ -7,14 +9,16 @@ import {
   Post,
   Body,
   Get,
-  Req,
 } from '@nestjs/common';
 
 // providers
 import { UsersService } from './users.service';
 
 // guards
-import { JwtAuthGuard } from 'src/auth/jwt/jwt.guard';
+import { JwtAuth } from 'src/auth/jwt/jwt.guard';
+
+// interceptors
+import { HideWishes } from './users.interceptors';
 
 // entities
 import { User } from './users.entities';
@@ -24,62 +28,50 @@ import { Wish } from 'src/wishes/wishes.entities';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { SearchUserDto } from './dto/search-user.dto';
 
-// types
-import { AuthenticatedRequest } from 'src/utils/common-types';
+// constants
+import { ME } from './users.constants';
 
 // content
 
 @Controller('users')
-@UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuth)
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
+  @Get(ME)
+  @UseInterceptors(HideWishes)
+  findMe(@CurrentlyAuthenticatedUser() me: User): User {
+    return me;
+  }
+
+  @Get(`${ME}/wishes`)
+  findMyWishes(@CurrentlyAuthenticatedUser() me: User): Array<Wish> {
+    return me.wishes;
+  }
+
+  @Patch(ME)
+  async updateMe(
+    @Body() data: UpdateUserDto,
+    @CurrentlyAuthenticatedUser() me: User,
+  ): Promise<User> {
+    return this.usersService.updateOne(me, data);
+  }
+
   @Get(':username')
-  findOne(@Param('username') username: string): Promise<User> {
-    return this.usersService.getUser(username, true);
+  async findOne(@Param('username') username: string): Promise<User> {
+    return this.usersService.findByUsernameOr404(username);
   }
 
   @Get(':username/wishes')
   async findOnesWishes(
     @Param('username') username: string,
   ): Promise<Array<Wish>> {
-    const user = await this.usersService.getUser(
-      username,
-      true,
-      ['wishes'],
-      ['wishes'],
-    );
+    const user = await this.usersService.findOnlyWishes(username);
     return user.wishes;
   }
 
-  @Get('me')
-  findMe(@Req() request: AuthenticatedRequest): Promise<User> {
-    return this.usersService.getUser(request.user.username, true);
-  }
-
-  @Patch('me')
-  updateMe(
-    @Body() data: UpdateUserDto,
-    @Req() request: AuthenticatedRequest,
-  ): Promise<User> {
-    return this.usersService.updateOne(request.user.username, data);
-  }
-
-  @Get('me/wishes')
-  async findMyWishes(
-    @Req() request: AuthenticatedRequest,
-  ): Promise<Array<Wish>> {
-    const me = await this.usersService.getUser(
-      request.user.username,
-      true,
-      ['wishes'],
-      ['wishes'],
-    );
-    return me.wishes;
-  }
-
   @Post('find')
-  searchMany(@Body() data: SearchUserDto): Promise<Array<User>> {
+  async searchMany(@Body() data: SearchUserDto): Promise<Array<User>> {
     return this.usersService.searchMany(data);
   }
 }

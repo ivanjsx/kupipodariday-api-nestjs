@@ -1,7 +1,8 @@
-export type AccessTokenResponse = {
+export type AccessToken = {
   access_token: string;
 };
 
 export type JwtPayload = {
-  subject: string;
+  username: string;
+  sub: number;
 };

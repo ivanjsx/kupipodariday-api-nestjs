@@ -1,16 +1,9 @@
-// libraries
-import * as bcrypt from 'bcryptjs';
-
 // decorators
 import { InjectRepository } from '@nestjs/typeorm';
-import {
-  ConflictException,
-  NotFoundException,
-  Injectable,
-} from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 
 // providers
-import { EntityNotFoundError, Repository } from 'typeorm';
+import { FindOptionsRelations, FindOptionsSelect, Repository } from 'typeorm';
 
 // entities
 import { User } from './users.entities';
@@ -20,8 +13,9 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { SearchUserDto } from './dto/search-user.dto';
 
-// constants
-import { USER_ALREADY_EXISTS, USER_NOT_FOUND } from 'src/utils/error-messages';
+// utils
+import { hash } from 'src/utils/hashing';
+import { UserCredentials } from 'src/utils/types';
 
 // content
 
@@ -32,56 +26,54 @@ export class UsersService {
     private readonly usersRepository: Repository<User>,
   ) {}
 
-  async getUser(
+  public async findByUsernameOr404(
     username: string,
-    fire404 = false,
-    fields: Array<keyof User> = undefined,
-    join: Array<keyof User> = undefined,
+    fields: FindOptionsSelect<User> = undefined,
+    join: FindOptionsRelations<User> = undefined,
   ): Promise<User> {
-    const options = {
+    return this.usersRepository.findOneOrFail({
       where: { username },
       select: fields,
       relations: join,
-    };
-    if (!fire404) {
-      return this.usersRepository.findOne(options);
-    }
-    try {
-      const user = await this.usersRepository.findOneOrFail(options);
-      return user;
-    } catch (error) {
-      if (error instanceof EntityNotFoundError) {
-        throw new NotFoundException(USER_NOT_FOUND);
-      }
-      throw error;
-    }
-  }
-
-  async ensureNotExists(email: string, username: string): Promise<void> {
-    const exists = await this.usersRepository.existsBy([
-      { email },
-      { username },
-    ]);
-    if (exists) {
-      throw new ConflictException(USER_ALREADY_EXISTS);
-    }
-  }
-
-  async createOne(data: CreateUserDto): Promise<User> {
-    await this.ensureNotExists(data.email, data.username);
-    const hash = await bcrypt.hash(data.password, 12);
-    return this.usersRepository.save({
-      ...data,
-      password: hash,
     });
   }
 
-  async updateOne(username: string, data: UpdateUserDto): Promise<User> {
-    const user = await this.getUser(username, true);
+  public async findOnlyCredentials(username: string): Promise<UserCredentials> {
+    return this.findByUsernameOr404(username, {
+      id: true,
+      username: true,
+      password: true,
+    });
+  }
+
+  public async findOnlyWishes(username: string): Promise<User> {
+    return this.findByUsernameOr404(
+      username,
+      { wishes: true },
+      { wishes: true },
+    );
+  }
+
+  public async findWithWishes(username: string): Promise<User> {
+    return this.findByUsernameOr404(username, undefined, { wishes: true });
+  }
+
+  public async createOne(data: CreateUserDto): Promise<User> {
+    const user = this.usersRepository.create({
+      ...data,
+      password: await hash(data.password),
+    });
+    return this.usersRepository.save(user);
+  }
+
+  public async updateOne(user: User, data: UpdateUserDto): Promise<User> {
+    if (data.password) {
+      data.password = await hash(data.password);
+    }
     return this.usersRepository.save({ ...user, ...data });
   }
 
-  searchMany(data: SearchUserDto): Promise<Array<User>> {
+  public async searchMany(data: SearchUserDto): Promise<Array<User>> {
     const { query } = data;
     return this.usersRepository.find({
       where: [{ email: query }, { username: query }],

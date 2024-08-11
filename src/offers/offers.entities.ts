@@ -7,10 +7,10 @@ import { User } from 'src/users/users.entities';
 import { Wish } from 'src/wishes/wishes.entities';
 
 // utils
-import { WithIdAndDates } from 'src/utils/abstract-entities';
+import { WithIdAndDates } from 'src/utils/entities';
 
 // constants
-import { MONEY_DECIMAL_PLACES } from 'src/utils/common-constants';
+import { MONEY_DECIMAL_PLACES } from 'src/utils/constants';
 
 // content
 
@@ -38,5 +38,5 @@ export class Offer extends WithIdAndDates {
   item: Wish;
 
   @ManyToOne(() => User, (user) => user.offers)
-  user: User;
+  proposer: User;
 }

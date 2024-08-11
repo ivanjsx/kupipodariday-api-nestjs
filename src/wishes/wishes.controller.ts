@@ -1,4 +1,5 @@
 // decorators
+import { CurrentlyAuthenticatedUser } from 'src/utils/decorators';
 import {
   ParseIntPipe,
   Controller,
@@ -15,10 +16,12 @@ import {
 import { WishesService } from './wishes.service';
 
 // guards
-import { JwtAuthGuard } from 'src/auth/jwt/jwt.guard';
+import { OnlyWishOwner } from './wishes.guards';
+import { JwtAuth } from 'src/auth/jwt/jwt.guard';
 
 // entities
 import { Wish } from './wishes.entities';
+import { User } from 'src/users/users.entities';
 
 // data transfer objects
 import { CreateWishDto } from './dto/create-wish.dto';
@@ -33,21 +36,36 @@ import { LAST_WISHES_LIMIT, TOP_WISHES_LIMIT } from './wishes.constants';
 export class WishesController {
   constructor(private readonly wishesService: WishesService) {}
 
+  @Get('last')
+  async findLast(): Promise<Array<Wish>> {
+    const limit = LAST_WISHES_LIMIT;
+    return this.wishesService.findLast(limit);
+  }
+
+  @Get('top')
+  async findTop(): Promise<Array<Wish>> {
+    const limit = TOP_WISHES_LIMIT;
+    return this.wishesService.findTop(limit);
+  }
+
   @Post()
-  @UseGuards(JwtAuthGuard)
-  createOne(@Body() data: CreateWishDto): Promise<Wish> {
-    return this.wishesService.createOne(data);
+  @UseGuards(JwtAuth)
+  async createOne(
+    @Body() data: CreateWishDto,
+    @CurrentlyAuthenticatedUser() me: User,
+  ): Promise<Wish> {
+    return this.wishesService.createOne(data, me);
   }
 
   @Get(':id')
-  @UseGuards(JwtAuthGuard)
-  findOne(@Param('id', ParseIntPipe) id: number): Promise<Wish> {
-    return this.wishesService.findOne(id);
+  @UseGuards(JwtAuth)
+  async findOne(@Param('id', ParseIntPipe) id: number): Promise<Wish> {
+    return this.wishesService.findByIdOr404(id);
   }
 
   @Patch(':id')
-  @UseGuards(JwtAuthGuard)
-  updateOne(
+  @UseGuards(JwtAuth, OnlyWishOwner)
+  async updateOne(
     @Body() data: UpdateWishDto,
     @Param('id', ParseIntPipe) id: number,
   ): Promise<Wish> {
@@ -55,26 +73,17 @@ export class WishesController {
   }
 
   @Delete(':id')
-  @UseGuards(JwtAuthGuard)
-  removeOne(@Param('id', ParseIntPipe) id: number): Promise<Wish> {
+  @UseGuards(JwtAuth, OnlyWishOwner)
+  async removeOne(@Param('id', ParseIntPipe) id: number): Promise<Wish> {
     return this.wishesService.removeOne(id);
   }
 
   @Post(':id/copy')
-  @UseGuards(JwtAuthGuard)
-  copyOne(@Param('id', ParseIntPipe) id: number): Promise<Wish> {
-    return this.wishesService.copyOne(id);
-  }
-
-  @Get('last')
-  findLast(): Promise<Array<Wish>> {
-    const limit = LAST_WISHES_LIMIT;
-    return this.wishesService.findLast(limit);
-  }
-
-  @Get('top')
-  findTop(): Promise<Array<Wish>> {
-    const limit = TOP_WISHES_LIMIT;
-    return this.wishesService.findTop(limit);
+  @UseGuards(JwtAuth)
+  async copyOne(
+    @Param('id', ParseIntPipe) id: number,
+    @CurrentlyAuthenticatedUser() me: User,
+  ): Promise<Wish> {
+    return this.wishesService.copyOne(id, me);
   }
 }

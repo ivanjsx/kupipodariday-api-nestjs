@@ -1,4 +1,5 @@
 // decorators
+import { Exclude } from 'class-transformer';
 import { Column, Entity, OneToMany } from 'typeorm';
 import { NotEquals, IsEmail, Length, IsUrl } from 'class-validator';
 
@@ -8,7 +9,7 @@ import { Offer } from 'src/offers/offers.entities';
 import { Wishlist } from 'src/wishlists/wishlists.entities';
 
 // utils
-import { WithIdAndDates } from 'src/utils/abstract-entities';
+import { WithIdAndDates } from 'src/utils/entities';
 
 // constants
 import {
@@ -18,6 +19,7 @@ import {
   MAX_USERNAME_LENGTH,
   DEFAULT_USER_AVATAR,
   DEFAULT_USER_ABOUT,
+  ME,
 } from './users.constants';
 
 // content
@@ -32,13 +34,13 @@ export class User extends WithIdAndDates {
   })
   email: string;
 
+  @Exclude()
   @Column({
     select: false,
   })
   password: string;
 
-  @NotEquals('me')
-  @NotEquals('admin')
+  @NotEquals(ME)
   @Length(MIN_USERNAME_LENGTH, MAX_USERNAME_LENGTH)
   @Column({
     length: MAX_USERNAME_LENGTH,
@@ -64,7 +66,7 @@ export class User extends WithIdAndDates {
   @OneToMany(() => Wish, (wish) => wish.owner)
   wishes: Array<Wish>;
 
-  @OneToMany(() => Offer, (offer) => offer.user)
+  @OneToMany(() => Offer, (offer) => offer.proposer)
   offers: Array<Offer>;
 
   @OneToMany(() => Wishlist, (wishlist) => wishlist.author)

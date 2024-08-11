@@ -2,7 +2,7 @@
 import { IsNumber, IsPositive, IsUrl, Length } from 'class-validator';
 
 // constants
-import { MONEY_DECIMAL_PLACES } from 'src/utils/common-constants';
+import { MONEY_DECIMAL_PLACES } from 'src/utils/constants';
 import {
   MIN_WISH_DESCRIPTION_LENGTH,
   MAX_WISH_DESCRIPTION_LENGTH,

@@ -1,22 +1,24 @@
 // decorators
+import { CurrentlyAuthenticatedUser } from 'src/utils/decorators';
 import {
   ParseIntPipe,
   Controller,
+  UseGuards,
   Param,
   Body,
   Post,
   Get,
-  UseGuards,
 } from '@nestjs/common';
 
 // providers
 import { OffersService } from './offers.service';
 
 // guards
-import { JwtAuthGuard } from 'src/auth/jwt/jwt.guard';
+import { JwtAuth } from 'src/auth/jwt/jwt.guard';
 
 // entities
 import { Offer } from './offers.entities';
+import { User } from 'src/users/users.entities';
 
 // data transfer objects
 import { CreateOfferDto } from './dto/create-offer.dto';
@@ -24,22 +26,25 @@ import { CreateOfferDto } from './dto/create-offer.dto';
 // content
 
 @Controller('offers')
-@UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuth)
 export class OffersController {
   constructor(private readonly offersService: OffersService) {}
 
   @Post()
-  createOne(@Body() data: CreateOfferDto): Promise<Offer> {
-    return this.offersService.createOne(data);
+  async createOne(
+    @Body() data: CreateOfferDto,
+    @CurrentlyAuthenticatedUser() me: User,
+  ): Promise<Offer> {
+    return this.offersService.createOne(data, me);
   }
 
   @Get()
-  findAll(): Promise<Array<Offer>> {
+  async findAll(): Promise<Array<Offer>> {
     return this.offersService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: number): Promise<Offer> {
-    return this.offersService.findOne(id);
+  async findOne(@Param('id', ParseIntPipe) id: number): Promise<Offer> {
+    return this.offersService.findByIdOr404(id);
   }
 }

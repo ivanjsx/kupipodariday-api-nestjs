@@ -2,7 +2,7 @@
 import { IsPositive, IsBoolean, IsNumber, IsInt } from 'class-validator';
 
 // constants
-import { MONEY_DECIMAL_PLACES } from 'src/utils/common-constants';
+import { MONEY_DECIMAL_PLACES } from 'src/utils/constants';
 
 // content
 

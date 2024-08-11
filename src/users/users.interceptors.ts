@@ -8,11 +8,11 @@ import {
 } from '@nestjs/common';
 
 @Injectable()
-export class HidePassword implements NestInterceptor {
+export class HideWishes implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<User> {
     return next.handle().pipe(
       map((user: User) => {
-        delete user.password;
+        delete user.wishes;
         return user;
       }),
     );

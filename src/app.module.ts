@@ -8,11 +8,13 @@ import { WishesModule } from './wishes/wishes.module';
 import { OffersModule } from './offers/offers.module';
 import { WishlistsModule } from './wishlists/wishlists.module';
 
-// orm modules
+// orm
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-// environment modules
-import { ConfigModule, ConfigService } from '@nestjs/config';
+// environment
+import { mainConfig } from './config/main';
+import { ConfigModule } from '@nestjs/config';
+import { DatabaseConfigFactory } from './config/database-config.factory';
 
 // content
 
@@ -25,22 +27,10 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     WishlistsModule,
     ConfigModule.forRoot({
       isGlobal: true,
+      load: [mainConfig],
     }),
     TypeOrmModule.forRootAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: async (configService: ConfigService) => ({
-        type: 'postgres',
-        useUTC: true,
-        synchronize: true,
-        autoLoadEntities: true,
-        host: configService.get<string>('DATABASE_HOST'),
-        port: configService.get<number>('DATABASE_PORT'),
-        username: configService.get<string>('DATABASE_USERNAME'),
-        password: configService.get<string>('DATABASE_PASSWORD'),
-        database: configService.get<string>('DATABASE_NAME'),
-        schema: configService.get<string>('DATABASE_SCHEMA'),
-      }),
+      useClass: DatabaseConfigFactory,
     }),
   ],
 })

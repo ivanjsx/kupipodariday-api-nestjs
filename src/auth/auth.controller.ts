@@ -1,11 +1,12 @@
 // decorators
+import { CurrentlyAuthenticatedUser } from 'src/utils/decorators';
 import {
   UseInterceptors,
   Controller,
   UseGuards,
   Body,
   Post,
-  Req,
+  UseFilters,
 } from '@nestjs/common';
 
 // providers
@@ -13,7 +14,10 @@ import { AuthService } from './auth.service';
 import { UsersService } from 'src/users/users.service';
 
 // guards
-import { LocalAuthGuard } from './local/local.guard';
+import { LocalAuth } from './local/local.guard';
+
+// filters
+import { IncorrectUsername, UserAlreadyExists } from './auth.filters';
 
 // interceptors
 import { HidePassword } from './auth.interceptors';
@@ -25,8 +29,8 @@ import { User } from 'src/users/users.entities';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 
 // types
-import { AccessTokenResponse } from './auth.types';
-import { AuthenticatedRequest } from 'src/utils/common-types';
+import { AccessToken } from './auth.types';
+import { UserCredentials } from 'src/utils/types';
 
 // content
 
@@ -38,14 +42,19 @@ export class AuthController {
   ) {}
 
   @Post('signup')
+  @UseFilters(UserAlreadyExists)
   @UseInterceptors(HidePassword)
-  signUp(@Body() data: CreateUserDto): Promise<User> {
+  async signUp(@Body() data: CreateUserDto): Promise<User> {
     return this.usersService.createOne(data);
   }
 
   @Post('signin')
-  @UseGuards(LocalAuthGuard)
-  signIn(@Req() request: AuthenticatedRequest): AccessTokenResponse {
-    return this.authService.authenticate(request.user);
+  @UseGuards(LocalAuth)
+  @UseFilters(IncorrectUsername)
+  async signIn(
+    @CurrentlyAuthenticatedUser()
+    me: UserCredentials,
+  ): Promise<AccessToken> {
+    return this.authService.authenticate(me);
   }
 }

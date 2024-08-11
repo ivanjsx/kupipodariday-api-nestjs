@@ -7,7 +7,14 @@ import {
   Length,
   Min,
 } from 'class-validator';
-import { ManyToMany, ManyToOne, OneToMany, Entity, Column } from 'typeorm';
+import {
+  AfterInsert,
+  ManyToMany,
+  ManyToOne,
+  OneToMany,
+  Entity,
+  Column,
+} from 'typeorm';
 
 // entities
 import { User } from 'src/users/users.entities';
@@ -15,10 +22,10 @@ import { Offer } from 'src/offers/offers.entities';
 import { Wishlist } from 'src/wishlists/wishlists.entities';
 
 // utils
-import { WithIdAndDates } from 'src/utils/abstract-entities';
+import { WithIdAndDates } from 'src/utils/entities';
 
 // constants
-import { MONEY_DECIMAL_PLACES } from 'src/utils/common-constants';
+import { MONEY_DECIMAL_PLACES } from 'src/utils/constants';
 import {
   MIN_WISH_DESCRIPTION_LENGTH,
   MAX_WISH_DESCRIPTION_LENGTH,
@@ -73,17 +80,43 @@ export class Wish extends WithIdAndDates {
     maxDecimalPlaces: MONEY_DECIMAL_PLACES,
   })
   @Column({
+    default: 0,
     type: 'decimal',
     scale: MONEY_DECIMAL_PLACES,
   })
   raised: number;
 
+  @ManyToOne(() => Wish, (wish) => wish.direct_copies)
+  direct_copy_of: Wish;
+
+  @OneToMany(() => Wish, (wish) => wish.direct_copy_of)
+  direct_copies: Array<Wish>;
+
+  @ManyToOne(() => Wish, (wish) => wish.descendant_copies)
+  root_copy_of: Wish;
+
+  @OneToMany(() => Wish, (wish) => wish.root_copy_of)
+  descendant_copies: Array<Wish>;
+
   @IsInt()
   @Min(0)
   @Column({
     scale: 0,
+    default: 0,
   })
   copied: number;
+
+  @AfterInsert()
+  updateRootCopyReference() {
+    this.root_copy_of = this.direct_copy_of
+      ? this.direct_copy_of.root_copy_of
+      : null;
+  }
+
+  @AfterInsert()
+  updateCopiesCount() {
+    this.copied = this.descendant_copies.length;
+  }
 
   @ManyToOne(() => User, (user) => user.wishes)
   owner: User;

@@ -7,13 +7,14 @@ import { Repository } from 'typeorm';
 
 // entities
 import { Wish } from './wishes.entities';
+import { User } from 'src/users/users.entities';
 
 // data transfer objects
 import { CreateWishDto } from './dto/create-wish.dto';
 import { UpdateWishDto } from './dto/update-wish.dto';
 
 // constants
-import { Direction } from 'src/utils/common-constants';
+import { Direction } from 'src/utils/constants';
 
 // content
 
@@ -24,54 +25,57 @@ export class WishesService {
     private readonly wishesRepository: Repository<Wish>,
   ) {}
 
-  async createOne(data: CreateWishDto): Promise<Wish> {
-    const insertResult = await this.wishesRepository.insert(data);
-    return insertResult.generatedMaps[0] as Wish;
+  public async createOne(
+    data: CreateWishDto,
+    owner: User,
+    copiedFrom: Wish = undefined,
+  ): Promise<Wish> {
+    const wish = this.wishesRepository.create({
+      ...data,
+      owner,
+    });
+    if (copiedFrom) {
+      wish.direct_copy_of = copiedFrom;
+    }
+    return this.wishesRepository.save(wish);
   }
 
-  findOne(id: number): Promise<Wish> {
+  public async findByIdOr404(id: number): Promise<Wish> {
     return this.wishesRepository.findOneByOrFail({ id });
   }
 
-  async updateOne(id: number, data: UpdateWishDto): Promise<Wish> {
-    const wish = await this.findOne(id);
+  public async updateOne(id: number, data: UpdateWishDto): Promise<Wish> {
+    const wish = await this.findByIdOr404(id);
     return this.wishesRepository.save({ ...wish, ...data });
   }
 
-  async removeOne(id: number): Promise<Wish> {
-    const wish = await this.findOne(id);
+  public async removeOne(id: number): Promise<Wish> {
+    const wish = await this.findByIdOr404(id);
     return this.wishesRepository.remove(wish);
   }
 
-  async copyOne(id: number): Promise<Wish> {
-    const wish = await this.findOne(id);
+  public async copyOne(fromId: number, copycat: User): Promise<Wish> {
+    const wish = await this.findByIdOr404(fromId);
     const copy: unknown = {};
     Object.keys(CreateWishDto).forEach((key) => {
       if (key in wish) {
         copy[key] = wish[key];
       }
     });
-    return this.createOne(copy as CreateWishDto);
+    return this.createOne(copy as CreateWishDto, copycat, wish);
   }
 
-  findMany(
-    orderBy: keyof Wish,
-    direction: Direction,
-    limit: number,
-  ): Promise<Array<Wish>> {
+  public async findLast(limit: number): Promise<Array<Wish>> {
     return this.wishesRepository.find({
-      order: {
-        [orderBy]: direction,
-      },
+      order: { createdAt: Direction.DESC },
       take: limit,
     });
   }
 
-  findLast(limit: number): Promise<Array<Wish>> {
-    return this.findMany('createdAt', Direction.DESC, limit);
-  }
-
-  findTop(limit: number): Promise<Array<Wish>> {
-    return this.findMany('copied', Direction.DESC, limit);
+  public async findTop(limit: number): Promise<Array<Wish>> {
+    return this.wishesRepository.find({
+      order: { copied: Direction.DESC },
+      take: limit,
+    });
   }
 }

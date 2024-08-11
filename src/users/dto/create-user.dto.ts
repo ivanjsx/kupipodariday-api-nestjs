@@ -14,6 +14,7 @@ import {
   MIN_USER_ABOUT_LENGTH,
   MAX_USERNAME_LENGTH,
   MIN_USERNAME_LENGTH,
+  ME,
 } from '../users.constants';
 
 // content
@@ -33,7 +34,7 @@ export class CreateUserDto {
   })
   password: string;
 
-  @NotEquals('me')
+  @NotEquals(ME)
   @Length(MIN_USERNAME_LENGTH, MAX_USERNAME_LENGTH)
   username: string;
 

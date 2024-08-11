@@ -6,6 +6,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
 // entities
+import { User } from 'src/users/users.entities';
 import { Wishlist } from './wishlists.entities';
 
 // data transfer objects
@@ -21,26 +22,32 @@ export class WishlistsService {
     private readonly wishlistsRepository: Repository<Wishlist>,
   ) {}
 
-  async createOne(data: CreateWishlistDto): Promise<Wishlist> {
-    const insertResult = await this.wishlistsRepository.insert(data);
-    return insertResult.generatedMaps[0] as Wishlist;
+  public async createOne(
+    data: CreateWishlistDto,
+    author: User,
+  ): Promise<Wishlist> {
+    const wishlist = this.wishlistsRepository.create({
+      ...data,
+      author,
+    });
+    return this.wishlistsRepository.save(wishlist);
   }
 
-  findAll() {
+  public async findAll(): Promise<Array<Wishlist>> {
     return this.wishlistsRepository.find();
   }
 
-  findOne(id: number): Promise<Wishlist> {
+  public async findByIdOr404(id: number): Promise<Wishlist> {
     return this.wishlistsRepository.findOneByOrFail({ id });
   }
 
   async updateOne(id: number, data: UpdateWishlistDto): Promise<Wishlist> {
-    const wishlist = await this.findOne(id);
+    const wishlist = await this.findByIdOr404(id);
     return this.wishlistsRepository.save({ ...wishlist, ...data });
   }
 
   async removeOne(id: number): Promise<Wishlist> {
-    const wish = await this.findOne(id);
+    const wish = await this.findByIdOr404(id);
     return this.wishlistsRepository.remove(wish);
   }
 }

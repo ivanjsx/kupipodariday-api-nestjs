@@ -7,6 +7,7 @@ import { Repository } from 'typeorm';
 
 // entities
 import { Offer } from './offers.entities';
+import { User } from 'src/users/users.entities';
 
 // data transfer objects
 import { CreateOfferDto } from './dto/create-offer.dto';
@@ -20,16 +21,19 @@ export class OffersService {
     private readonly offersRepository: Repository<Offer>,
   ) {}
 
-  async createOne(data: CreateOfferDto): Promise<Offer> {
-    const insertResult = await this.offersRepository.insert(data);
-    return insertResult.generatedMaps[0] as Offer;
+  public async createOne(data: CreateOfferDto, proposer: User): Promise<Offer> {
+    const offer = this.offersRepository.create({
+      ...data,
+      proposer,
+    });
+    return this.offersRepository.save(offer);
   }
 
-  findAll() {
+  public async findAll(): Promise<Array<Offer>> {
     return this.offersRepository.find();
   }
 
-  findOne(id: number): Promise<Offer> {
+  public async findByIdOr404(id: number): Promise<Offer> {
     return this.offersRepository.findOneByOrFail({ id });
   }
 }
