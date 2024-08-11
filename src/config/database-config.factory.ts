@@ -5,6 +5,7 @@ import { TypeOrmModuleOptions, TypeOrmOptionsFactory } from '@nestjs/typeorm';
 @Injectable()
 export class DatabaseConfigFactory implements TypeOrmOptionsFactory {
   constructor(private readonly configService: ConfigService) {}
+
   createTypeOrmOptions(): TypeOrmModuleOptions {
     return {
       type: 'postgres',

@@ -53,8 +53,8 @@ export class AuthController {
   @UseFilters(IncorrectUsername)
   async signIn(
     @CurrentlyAuthenticatedUser()
-    me: UserCredentials,
+    credentials: UserCredentials,
   ): Promise<AccessToken> {
-    return this.authService.authenticate(me);
+    return this.authService.authenticate(credentials);
   }
 }
