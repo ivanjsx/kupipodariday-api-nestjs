@@ -11,7 +11,11 @@ export const mainConfig = () => ({
     password: process.env.DATABASE_PASSWORD || 'student',
   },
   jwt: {
-    secret: process.env.JWT_SECRET || 'yes-i-do-masturbate-to-my-own-code',
     ttl: process.env.JWT_TTL || '10h',
+    secret: process.env.JWT_SECRET || 'yes-i-do-masturbate-to-my-own-code',
+  },
+  throttler: {
+    ttl: parseInt(process.env.THROTTLER_TTL, 10) || 60,
+    limit: parseInt(process.env.THROTTLER_LIMIT, 10) || 10,
   },
 });

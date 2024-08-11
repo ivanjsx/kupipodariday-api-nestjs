@@ -14,9 +14,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 // security
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { ThrottlerConfigFactory } from './config/throttler-config.factory';
 
 // environment
-import { mainConfig } from './config/main';
+import { mainConfig } from './config/main.config';
 import { ConfigModule } from '@nestjs/config';
 import { DatabaseConfigFactory } from './config/database-config.factory';
 
@@ -36,12 +37,9 @@ import { DatabaseConfigFactory } from './config/database-config.factory';
     TypeOrmModule.forRootAsync({
       useClass: DatabaseConfigFactory,
     }),
-    ThrottlerModule.forRoot([
-      {
-        ttl: 60,
-        limit: 10,
-      },
-    ]),
+    ThrottlerModule.forRootAsync({
+      useClass: ThrottlerConfigFactory,
+    }),
   ],
   providers: [{ provide: APP_GUARD, useClass: ThrottlerGuard }],
 })
