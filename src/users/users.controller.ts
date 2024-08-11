@@ -3,6 +3,7 @@ import { CurrentlyAuthenticatedUser } from 'src/utils/decorators';
 import {
   UseInterceptors,
   Controller,
+  UseFilters,
   UseGuards,
   Patch,
   Param,
@@ -16,6 +17,9 @@ import { UsersService } from './users.service';
 
 // guards
 import { JwtAuth } from 'src/auth/jwt/jwt.guard';
+
+// filters
+import { UserNotFound } from './users.filters';
 
 // interceptors
 import { HideWishes } from './users.interceptors';
@@ -58,11 +62,13 @@ export class UsersController {
   }
 
   @Get(':username')
+  @UseFilters(UserNotFound)
   async findOne(@Param('username') username: string): Promise<User> {
     return this.usersService.findByUsernameOr404(username);
   }
 
   @Get(':username/wishes')
+  @UseFilters(UserNotFound)
   async findOnesWishes(
     @Param('username') username: string,
   ): Promise<Array<Wish>> {
