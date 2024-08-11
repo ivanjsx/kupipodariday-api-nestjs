@@ -54,6 +54,7 @@ export class UsersController {
   }
 
   @Patch(ME)
+  @UseInterceptors(HideWishes)
   async updateMe(
     @Body() data: UpdateUserDto,
     @CurrentlyAuthenticatedUser() me: User,
