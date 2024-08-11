@@ -35,6 +35,7 @@ import { SearchUserDto } from './dto/search-user.dto';
 
 // constants
 import { ME } from './users.constants';
+import { HidePassword } from 'src/common/interceptors';
 
 // content
 
@@ -56,6 +57,7 @@ export class UsersController {
 
   @Patch(ME)
   @UseInterceptors(HideWishes)
+  @UseInterceptors(HidePassword)
   @UseFilters(UserAlreadyExists)
   async updateMe(
     @Body() data: UpdateUserDto,

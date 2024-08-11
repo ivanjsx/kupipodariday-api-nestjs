@@ -21,7 +21,7 @@ import { IncorrectUsername } from './auth.filters';
 import { UserAlreadyExists } from 'src/common/filters';
 
 // interceptors
-import { HidePassword } from './auth.interceptors';
+import { HidePassword } from 'src/common/interceptors';
 
 // entities
 import { User } from 'src/users/users.entities';
