@@ -17,7 +17,7 @@ import { WishlistsService } from './wishlists.service';
 
 // guards
 import { JwtAuth } from 'src/auth/jwt/jwt.guard';
-import { OnlyWishlistOwner } from './wishlists.guards';
+import { OnlyWishlistAuthor } from './wishlists.guards';
 
 // entities
 import { User } from 'src/users/users.entities';
@@ -53,7 +53,7 @@ export class WishlistsController {
   }
 
   @Patch(':id')
-  @UseGuards(OnlyWishlistOwner)
+  @UseGuards(OnlyWishlistAuthor)
   async updateOne(
     @Body() data: UpdateWishlistDto,
     @Param('id', ParseIntPipe) id: number,
@@ -62,7 +62,7 @@ export class WishlistsController {
   }
 
   @Delete(':id')
-  @UseGuards(OnlyWishlistOwner)
+  @UseGuards(OnlyWishlistAuthor)
   async removeOne(@Param('id', ParseIntPipe) id: number): Promise<Wishlist> {
     return this.wishlistsService.removeOne(id);
   }
