@@ -21,7 +21,7 @@ export class OnlyWishlistAuthor implements CanActivate {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest<Request>();
-    const wishlistId = parseInt(request.params.id, 10);
+    const wishlistId = parseInt(request.params.id);
     const wishlist = await this.wishlistsService.findByIdOr404(wishlistId);
 
     console.log('wishlist.author', wishlist.author);

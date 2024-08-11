@@ -1,10 +1,13 @@
 export const mainConfig = () => ({
   app: {
-    port: parseInt(process.env.APP_PORT, 10) || 3000,
+    port: parseInt(process.env.APP_PORT) || 3000,
+    cors: {
+      origin: process.env.APP_CORS_ORIGIN || 'http://localhost:3001',
+    },
   },
   database: {
     host: process.env.DATABASE_HOST || 'localhost',
-    port: parseInt(process.env.DATABASE_PORT, 10) || 5432,
+    port: parseInt(process.env.DATABASE_PORT) || 5432,
     name: process.env.DATABASE_NAME || 'kupipodariday',
     schema: process.env.DATABASE_SCHEMA || 'kupipodariday',
     username: process.env.DATABASE_USERNAME || 'student',
@@ -15,7 +18,7 @@ export const mainConfig = () => ({
     secret: process.env.JWT_SECRET || 'yes-i-do-masturbate-to-my-own-code',
   },
   throttler: {
-    ttl: parseInt(process.env.THROTTLER_TTL, 10) || 60,
-    limit: parseInt(process.env.THROTTLER_LIMIT, 10) || 10,
+    ttl: parseInt(process.env.THROTTLER_TTL) || 60,
+    limit: parseInt(process.env.THROTTLER_LIMIT) || 10,
   },
 });

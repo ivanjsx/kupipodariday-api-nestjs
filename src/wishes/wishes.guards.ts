@@ -21,7 +21,7 @@ export class OnlyWishOwner implements CanActivate {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest<Request>();
-    const wishId = parseInt(request.params.id, 10);
+    const wishId = parseInt(request.params.id);
     const wish = await this.wishesServise.findByIdOr404(wishId);
 
     console.log('wish.owner', wish.owner);
