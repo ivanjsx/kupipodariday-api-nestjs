@@ -3,13 +3,14 @@ import { CurrentlyAuthenticatedUser } from 'src/utils/decorators';
 import {
   ParseIntPipe,
   Controller,
+  UseFilters,
+  UseGuards,
   Delete,
   Param,
   Patch,
   Body,
   Post,
   Get,
-  UseGuards,
 } from '@nestjs/common';
 
 // providers
@@ -18,6 +19,9 @@ import { WishesService } from './wishes.service';
 // guards
 import { OnlyWishOwner } from './wishes.guards';
 import { JwtAuth } from 'src/auth/jwt/jwt.guard';
+
+// filters
+import { WishNotFound } from './wishes.filters';
 
 // entities
 import { Wish } from './wishes.entities';
@@ -59,11 +63,13 @@ export class WishesController {
 
   @Get(':id')
   @UseGuards(JwtAuth)
+  @UseFilters(WishNotFound)
   async findOne(@Param('id', ParseIntPipe) id: number): Promise<Wish> {
     return this.wishesService.findByIdOr404(id);
   }
 
   @Patch(':id')
+  @UseFilters(WishNotFound)
   @UseGuards(JwtAuth, OnlyWishOwner)
   async updateOne(
     @Body() data: UpdateWishDto,
@@ -73,6 +79,7 @@ export class WishesController {
   }
 
   @Delete(':id')
+  @UseFilters(WishNotFound)
   @UseGuards(JwtAuth, OnlyWishOwner)
   async removeOne(@Param('id', ParseIntPipe) id: number): Promise<Wish> {
     return this.wishesService.removeOne(id);
@@ -80,6 +87,7 @@ export class WishesController {
 
   @Post(':id/copy')
   @UseGuards(JwtAuth)
+  @UseFilters(WishNotFound)
   async copyOne(
     @Param('id', ParseIntPipe) id: number,
     @CurrentlyAuthenticatedUser() me: User,
