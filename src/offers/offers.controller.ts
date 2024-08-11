@@ -3,6 +3,7 @@ import { CurrentlyAuthenticatedUser } from 'src/utils/decorators';
 import {
   ParseIntPipe,
   Controller,
+  UseFilters,
   UseGuards,
   Param,
   Body,
@@ -15,6 +16,9 @@ import { OffersService } from './offers.service';
 
 // guards
 import { JwtAuth } from 'src/auth/jwt/jwt.guard';
+
+// filters
+import { OfferNotFound } from './offers.filters';
 
 // entities
 import { Offer } from './offers.entities';
@@ -44,6 +48,7 @@ export class OffersController {
   }
 
   @Get(':id')
+  @UseFilters(OfferNotFound)
   async findOne(@Param('id', ParseIntPipe) id: number): Promise<Offer> {
     return this.offersService.findByIdOr404(id);
   }
