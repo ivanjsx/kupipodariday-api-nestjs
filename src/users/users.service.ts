@@ -1,6 +1,6 @@
 // decorators
-import { InjectRepository } from '@nestjs/typeorm';
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 
 // providers
 import { FindOptionsRelations, FindOptionsSelect, Repository } from 'typeorm';
@@ -14,6 +14,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { SearchUserDto } from './dto/search-user.dto';
 
 // utils
+import { ILike } from 'typeorm';
 import { hash } from 'src/utils/hashing';
 import { UserCredentials } from 'src/utils/types';
 
@@ -76,7 +77,10 @@ export class UsersService {
   public async searchMany(data: SearchUserDto): Promise<Array<User>> {
     const { query } = data;
     return this.usersRepository.find({
-      where: [{ email: query }, { username: query }],
+      where: [
+        { email: ILike(`%${query}%`) },
+        { username: ILike(`%${query}%`) },
+      ],
     });
   }
 }
