@@ -2,8 +2,13 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
-// providers
-import { FindOptionsRelations, FindOptionsSelect, Repository } from 'typeorm';
+// orm
+import {
+  FindOptionsRelations,
+  FindOptionsSelect,
+  FindOptionsWhere,
+  Repository,
+} from 'typeorm';
 
 // entities
 import { User } from './users.entities';
@@ -27,38 +32,58 @@ export class UsersService {
     private readonly usersRepository: Repository<User>,
   ) {}
 
-  public async findByUsernameOr404(
-    username: string,
-    fields: FindOptionsSelect<User> = undefined,
-    join: FindOptionsRelations<User> = undefined,
+  private async findOr404(
+    clause: FindOptionsWhere<User>,
+    fields: FindOptionsSelect<User>,
+    join: FindOptionsRelations<User>,
   ): Promise<User> {
     return this.usersRepository.findOneOrFail({
-      where: { username },
+      where: clause,
       select: fields,
       relations: join,
     });
   }
 
-  public async findAndReturnOnlyCredentials(
-    username: string,
-  ): Promise<UserCredentials> {
-    return this.findByUsernameOr404(username, {
-      id: true,
-      username: true,
-      password: true,
-    });
+  public async findByIdOr404(
+    id: number,
+    fields: FindOptionsSelect<User> = undefined,
+    join: FindOptionsRelations<User> = undefined,
+  ): Promise<User> {
+    return this.findOr404({ id }, fields, join);
   }
 
-  public async findAndReturnOnlyWishes(username: string): Promise<User> {
+  public async findByUsernameOr404(
+    username: string,
+    fields: FindOptionsSelect<User> = undefined,
+    join: FindOptionsRelations<User> = undefined,
+  ): Promise<User> {
+    return this.findOr404({ username }, fields, join);
+  }
+
+  public async findWithWishesById(id: number): Promise<User> {
+    return this.findByIdOr404(id, undefined, { wishes: true });
+  }
+
+  public async findOnlyCredentialsByUsername(
+    username: string,
+  ): Promise<UserCredentials> {
+    return this.findByUsernameOr404(
+      username,
+      {
+        id: true,
+        username: true,
+        password: true,
+      },
+      undefined,
+    );
+  }
+
+  public async findOnlyWishesByUsername(username: string): Promise<User> {
     return this.findByUsernameOr404(
       username,
       { wishes: true },
       { wishes: true },
     );
-  }
-
-  public async findByUsernameWishWishes(username: string): Promise<User> {
-    return this.findByUsernameOr404(username, undefined, { wishes: true });
   }
 
   public async createOne(data: CreateUserDto): Promise<User> {

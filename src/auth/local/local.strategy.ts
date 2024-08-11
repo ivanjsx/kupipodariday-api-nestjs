@@ -25,7 +25,7 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
 
   async validate(username: string, password: string): Promise<UserCredentials> {
     const credentials =
-      await this.usersService.findAndReturnOnlyCredentials(username);
+      await this.usersService.findOnlyCredentialsByUsername(username);
     const match = await compare(password, credentials.password);
     if (!match) {
       throw new UnauthorizedException(INCORRECT_CREDENTIALS_ERROR_MESSAGE);
