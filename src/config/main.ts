@@ -12,6 +12,6 @@ export const mainConfig = () => ({
   },
   jwt: {
     secret: process.env.JWT_SECRET || 'yes-i-do-masturbate-to-my-own-code',
-    ttl: process.env.JWT_TTL || '1h',
+    ttl: process.env.JWT_TTL || '10h',
   },
 });

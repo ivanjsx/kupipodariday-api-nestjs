@@ -39,7 +39,9 @@ export class UsersService {
     });
   }
 
-  public async findOnlyCredentials(username: string): Promise<UserCredentials> {
+  public async findAndReturnOnlyCredentials(
+    username: string,
+  ): Promise<UserCredentials> {
     return this.findByUsernameOr404(username, {
       id: true,
       username: true,
@@ -47,7 +49,7 @@ export class UsersService {
     });
   }
 
-  public async findOnlyWishes(username: string): Promise<User> {
+  public async findAndReturnOnlyWishes(username: string): Promise<User> {
     return this.findByUsernameOr404(
       username,
       { wishes: true },
@@ -55,7 +57,7 @@ export class UsersService {
     );
   }
 
-  public async findWithWishes(username: string): Promise<User> {
+  public async findByUsernameWishWishes(username: string): Promise<User> {
     return this.findByUsernameOr404(username, undefined, { wishes: true });
   }
 

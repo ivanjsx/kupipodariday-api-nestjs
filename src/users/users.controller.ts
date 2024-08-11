@@ -73,7 +73,7 @@ export class UsersController {
   async findOnesWishes(
     @Param('username') username: string,
   ): Promise<Array<Wish>> {
-    const user = await this.usersService.findOnlyWishes(username);
+    const user = await this.usersService.findAndReturnOnlyWishes(username);
     return user.wishes;
   }
 
