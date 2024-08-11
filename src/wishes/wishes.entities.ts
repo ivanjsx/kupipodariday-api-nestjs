@@ -1,20 +1,13 @@
 // decorators
+import { ManyToMany, ManyToOne, OneToMany, Entity, Column } from 'typeorm';
 import {
-  IsInt,
-  IsNumber,
   IsPositive,
-  IsUrl,
+  IsNumber,
   Length,
+  IsUrl,
+  IsInt,
   Min,
 } from 'class-validator';
-import {
-  AfterInsert,
-  ManyToMany,
-  ManyToOne,
-  OneToMany,
-  Entity,
-  Column,
-} from 'typeorm';
 
 // entities
 import { User } from 'src/users/users.entities';
@@ -86,13 +79,19 @@ export class Wish extends WithIdAndDates {
   })
   raised: number;
 
-  @ManyToOne(() => Wish, (wish) => wish.direct_copies)
+  @ManyToOne(() => Wish, (wish) => wish.direct_copies, {
+    nullable: true,
+    onDelete: 'SET NULL',
+  })
   direct_copy_of: Wish;
 
   @OneToMany(() => Wish, (wish) => wish.direct_copy_of)
   direct_copies: Array<Wish>;
 
-  @ManyToOne(() => Wish, (wish) => wish.descendant_copies)
+  @ManyToOne(() => Wish, (wish) => wish.descendant_copies, {
+    nullable: true,
+    onDelete: 'SET NULL',
+  })
   root_copy_of: Wish;
 
   @OneToMany(() => Wish, (wish) => wish.root_copy_of)
@@ -106,19 +105,10 @@ export class Wish extends WithIdAndDates {
   })
   copied: number;
 
-  @AfterInsert()
-  updateRootCopyReference() {
-    this.root_copy_of = this.direct_copy_of
-      ? this.direct_copy_of.root_copy_of
-      : null;
-  }
-
-  @AfterInsert()
-  updateCopiesCount() {
-    this.copied = this.descendant_copies.length;
-  }
-
-  @ManyToOne(() => User, (user) => user.wishes)
+  @ManyToOne(() => User, (user) => user.wishes, {
+    nullable: false,
+    onDelete: 'CASCADE',
+  })
   owner: User;
 
   @OneToMany(() => Offer, (offer) => offer.item)

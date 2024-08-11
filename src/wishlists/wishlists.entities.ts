@@ -39,7 +39,10 @@ export class Wishlist extends WithIdAndDates {
   })
   description: string;
 
-  @ManyToOne(() => User, (user) => user.wishlists)
+  @ManyToOne(() => User, (user) => user.wishlists, {
+    nullable: false,
+    onDelete: 'CASCADE',
+  })
   author: User;
 
   @ManyToMany(() => Wish, (wish) => wish.lists)

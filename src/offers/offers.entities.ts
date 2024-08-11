@@ -34,9 +34,15 @@ export class Offer extends WithIdAndDates {
   })
   amount: number;
 
-  @ManyToOne(() => Wish, (wish) => wish.offers)
+  @ManyToOne(() => Wish, (wish) => wish.offers, {
+    nullable: false,
+    onDelete: 'CASCADE',
+  })
   item: Wish;
 
-  @ManyToOne(() => User, (user) => user.offers)
+  @ManyToOne(() => User, (user) => user.offers, {
+    nullable: false,
+    onDelete: 'CASCADE',
+  })
   proposer: User;
 }
