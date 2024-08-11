@@ -1,5 +1,6 @@
 // decorators
 import { Module } from '@nestjs/common';
+import { APP_GUARD } from '@nestjs/core';
 
 // app modules
 import { AuthModule } from './auth/auth.module';
@@ -10,6 +11,9 @@ import { WishlistsModule } from './wishlists/wishlists.module';
 
 // orm
 import { TypeOrmModule } from '@nestjs/typeorm';
+
+// security
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 
 // environment
 import { mainConfig } from './config/main';
@@ -32,6 +36,13 @@ import { DatabaseConfigFactory } from './config/database-config.factory';
     TypeOrmModule.forRootAsync({
       useClass: DatabaseConfigFactory,
     }),
+    ThrottlerModule.forRoot([
+      {
+        ttl: 60,
+        limit: 10,
+      },
+    ]),
   ],
+  providers: [{ provide: APP_GUARD, useClass: ThrottlerGuard }],
 })
 export class AppModule {}
