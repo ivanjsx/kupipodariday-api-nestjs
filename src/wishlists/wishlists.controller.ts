@@ -3,6 +3,7 @@ import { CurrentlyAuthenticatedUser } from 'src/utils/decorators';
 import {
   ParseIntPipe,
   Controller,
+  UseFilters,
   UseGuards,
   Delete,
   Param,
@@ -18,6 +19,9 @@ import { WishlistsService } from './wishlists.service';
 // guards
 import { JwtAuth } from 'src/auth/jwt/jwt.guard';
 import { OnlyWishlistAuthor } from './wishlists.guards';
+
+// filters
+import { WishlistNotFound } from './wishlists.filters';
 
 // entities
 import { User } from 'src/users/users.entities';
@@ -48,11 +52,13 @@ export class WishlistsController {
   }
 
   @Get(':id')
+  @UseFilters(WishlistNotFound)
   async findOne(@Param('id', ParseIntPipe) id: number): Promise<Wishlist> {
     return this.wishlistsService.findByIdOr404(id);
   }
 
   @Patch(':id')
+  @UseFilters(WishlistNotFound)
   @UseGuards(OnlyWishlistAuthor)
   async updateOne(
     @Body() data: UpdateWishlistDto,
@@ -62,6 +68,7 @@ export class WishlistsController {
   }
 
   @Delete(':id')
+  @UseFilters(WishlistNotFound)
   @UseGuards(OnlyWishlistAuthor)
   async removeOne(@Param('id', ParseIntPipe) id: number): Promise<Wishlist> {
     return this.wishlistsService.removeOne(id);
