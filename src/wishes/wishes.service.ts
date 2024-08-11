@@ -14,7 +14,7 @@ import { CreateWishDto } from './dto/create-wish.dto';
 import { UpdateWishDto } from './dto/update-wish.dto';
 
 // constants
-import { Direction } from 'src/utils/constants';
+import { Direction } from 'src/common/constants';
 
 // content
 
@@ -49,7 +49,7 @@ export class WishesService {
 
   public async findByIdOr404(id: number, withOrigins = false): Promise<Wish> {
     const relations = withOrigins
-      ? { direct_copy_of: true, root_copy_of: true }
+      ? { directCopyOf: true, rootCopyOf: true }
       : undefined;
     return this.wishesRepository.findOneOrFail({ where: { id }, relations });
   }
@@ -74,12 +74,12 @@ export class WishesService {
       owner: copycat,
     });
 
-    to.direct_copy_of = from;
+    to.directCopyOf = from;
 
-    if (from.root_copy_of) {
-      to.root_copy_of = from.root_copy_of;
+    if (from.rootCopyOf) {
+      to.rootCopyOf = from.rootCopyOf;
     } else {
-      to.root_copy_of = from;
+      to.rootCopyOf = from;
     }
 
     from.copied += 1;

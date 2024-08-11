@@ -1,5 +1,5 @@
 // decorators
-import { CurrentlyAuthenticatedUser } from 'src/utils/decorators';
+import { CurrentlyAuthenticatedUser } from 'src/common/decorators';
 import {
   UseInterceptors,
   Controller,
@@ -20,6 +20,7 @@ import { JwtAuth } from 'src/auth/jwt/jwt.guard';
 
 // filters
 import { UserNotFound } from './users.filters';
+import { UserAlreadyExists } from 'src/common/filters';
 
 // interceptors
 import { HideWishes } from './users.interceptors';
@@ -55,6 +56,7 @@ export class UsersController {
 
   @Patch(ME)
   @UseInterceptors(HideWishes)
+  @UseFilters(UserAlreadyExists)
   async updateMe(
     @Body() data: UpdateUserDto,
     @CurrentlyAuthenticatedUser() me: User,

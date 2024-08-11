@@ -9,10 +9,10 @@ import { PassportStrategy } from '@nestjs/passport';
 import { UsersService } from 'src/users/users.service';
 
 // utils
-import { compare } from 'src/utils/hashing';
+import { compare } from 'src/common/hashing';
 
 // constants
-import { UserCredentials } from 'src/utils/types';
+import { UserCredentials } from 'src/common/types';
 import { INCORRECT_CREDENTIALS_ERROR_MESSAGE } from '../auth.constants';
 
 // content

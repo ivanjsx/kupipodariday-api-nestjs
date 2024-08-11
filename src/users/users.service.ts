@@ -15,8 +15,8 @@ import { SearchUserDto } from './dto/search-user.dto';
 
 // utils
 import { ILike } from 'typeorm';
-import { hash } from 'src/utils/hashing';
-import { UserCredentials } from 'src/utils/types';
+import { hash } from 'src/common/hashing';
+import { UserCredentials } from 'src/common/types';
 
 // content
 

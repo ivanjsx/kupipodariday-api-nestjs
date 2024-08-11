@@ -9,7 +9,7 @@ import { Offer } from 'src/offers/offers.entities';
 import { Wishlist } from 'src/wishlists/wishlists.entities';
 
 // utils
-import { WithIdAndDates } from 'src/utils/entities';
+import { WithIdAndDates } from 'src/common/entities';
 
 // constants
 import {

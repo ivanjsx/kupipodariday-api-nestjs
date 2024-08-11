@@ -1,5 +1,5 @@
 // libraries
-import { CurrentlyAuthenticatedUser } from 'src/utils/decorators';
+import { CurrentlyAuthenticatedUser } from 'src/common/decorators';
 import {
   ParseIntPipe,
   Controller,

@@ -5,7 +5,7 @@ import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 
 // types
-import { UserCredentials } from 'src/utils/types';
+import { UserCredentials } from 'src/common/types';
 import { AccessToken, JwtPayload } from './auth.types';
 
 // content

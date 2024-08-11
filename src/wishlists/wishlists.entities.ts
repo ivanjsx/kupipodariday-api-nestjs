@@ -7,7 +7,7 @@ import { User } from 'src/users/users.entities';
 import { Wish } from 'src/wishes/wishes.entities';
 
 // utils
-import { WithIdAndDates } from 'src/utils/entities';
+import { WithIdAndDates } from 'src/common/entities';
 
 // constants
 import {

@@ -1,5 +1,5 @@
 // decorators
-import { CurrentlyAuthenticatedUser } from 'src/utils/decorators';
+import { CurrentlyAuthenticatedUser } from 'src/common/decorators';
 import {
   UseInterceptors,
   Controller,
@@ -17,7 +17,8 @@ import { UsersService } from 'src/users/users.service';
 import { LocalAuth } from './local/local.guard';
 
 // filters
-import { IncorrectUsername, UserAlreadyExists } from './auth.filters';
+import { IncorrectUsername } from './auth.filters';
+import { UserAlreadyExists } from 'src/common/filters';
 
 // interceptors
 import { HidePassword } from './auth.interceptors';
@@ -30,7 +31,7 @@ import { CreateUserDto } from 'src/users/dto/create-user.dto';
 
 // types
 import { AccessToken } from './auth.types';
-import { UserCredentials } from 'src/utils/types';
+import { UserCredentials } from 'src/common/types';
 
 // content
 

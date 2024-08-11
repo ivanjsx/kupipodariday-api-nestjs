@@ -22,10 +22,10 @@ import { Offer } from 'src/offers/offers.entities';
 import { Wishlist } from 'src/wishlists/wishlists.entities';
 
 // utils
-import { WithIdAndDates } from 'src/utils/entities';
+import { WithIdAndDates } from 'src/common/entities';
 
 // constants
-import { MONEY_DECIMAL_PLACES } from 'src/utils/constants';
+import { MONEY_DECIMAL_PLACES } from 'src/common/constants';
 import {
   MIN_WISH_DESCRIPTION_LENGTH,
   MAX_WISH_DESCRIPTION_LENGTH,
@@ -87,23 +87,23 @@ export class Wish extends WithIdAndDates {
   })
   raised: number;
 
-  @ManyToOne(() => Wish, (wish) => wish.direct_copies, {
+  @ManyToOne(() => Wish, (wish) => wish.directCopies, {
     nullable: true,
     onDelete: 'SET NULL',
   })
-  direct_copy_of: Wish;
+  directCopyOf: Wish;
 
-  @OneToMany(() => Wish, (wish) => wish.direct_copy_of)
-  direct_copies: Array<Wish>;
+  @OneToMany(() => Wish, (wish) => wish.directCopyOf)
+  directCopies: Array<Wish>;
 
-  @ManyToOne(() => Wish, (wish) => wish.descendant_copies, {
+  @ManyToOne(() => Wish, (wish) => wish.descendantCopies, {
     nullable: true,
     onDelete: 'SET NULL',
   })
-  root_copy_of: Wish;
+  rootCopyOf: Wish;
 
-  @OneToMany(() => Wish, (wish) => wish.root_copy_of)
-  descendant_copies: Array<Wish>;
+  @OneToMany(() => Wish, (wish) => wish.rootCopyOf)
+  descendantCopies: Array<Wish>;
 
   @IsInt()
   @Min(0)
