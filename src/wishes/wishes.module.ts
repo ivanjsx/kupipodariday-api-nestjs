@@ -1,7 +1,7 @@
 // decorators
 import { Module } from '@nestjs/common';
 
-// orm modules
+// orm
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 // entities

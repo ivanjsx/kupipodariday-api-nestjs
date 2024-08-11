@@ -1,9 +1,9 @@
 // libraries
+import { Injectable, UnauthorizedException } from '@nestjs/common';
+
+// strategies
 import { Strategy } from 'passport-local';
 import { PassportStrategy } from '@nestjs/passport';
-
-// decorators
-import { Injectable, UnauthorizedException } from '@nestjs/common';
 
 // providers
 import { UsersService } from 'src/users/users.service';

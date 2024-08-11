@@ -1,7 +1,9 @@
 // decorators
-import { BadRequestException } from '@nestjs/common';
 import { IsBoolean, IsNumber, IsPositive } from 'class-validator';
 import { BeforeInsert, BeforeUpdate, Column, Entity, ManyToOne } from 'typeorm';
+
+// exceptions
+import { BadRequestException } from '@nestjs/common';
 
 // entities
 import { User } from 'src/users/users.entities';

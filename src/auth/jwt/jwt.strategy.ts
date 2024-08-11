@@ -1,9 +1,9 @@
+// decorators
+import { Injectable } from '@nestjs/common';
+
 // strategies
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
-
-// decorators
-import { Injectable } from '@nestjs/common';
 
 // providers
 import { ConfigService } from '@nestjs/config';

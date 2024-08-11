@@ -3,10 +3,10 @@ import { CurrentlyAuthenticatedUser } from 'src/utils/decorators';
 import {
   UseInterceptors,
   Controller,
+  UseFilters,
   UseGuards,
   Body,
   Post,
-  UseFilters,
 } from '@nestjs/common';
 
 // providers
