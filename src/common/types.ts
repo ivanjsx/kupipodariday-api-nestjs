@@ -1,6 +1,6 @@
 // libraries
-import { PickType } from '@nestjs/mapped-types';
 import { Request } from 'express';
+import { PickType } from '@nestjs/mapped-types';
 
 // entities
 import { User } from 'src/users/users.entities';
@@ -15,12 +15,12 @@ export interface AccessToken {
   access_token: string;
 }
 
-export class UserCredentials extends PickType(User, [
+export class UserCredentialsDto extends PickType(User, [
   'id',
   'username',
   'password',
 ]) {}
 
-export class JwtPayload extends PickType(User, ['username']) {
+export class JwtPayloadDto extends PickType(User, ['username']) {
   sub: number;
 }

@@ -17,11 +17,11 @@ import { User } from './users.entities';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { SearchUserDto } from './dto/search-user.dto';
+import { UserCredentialsDto } from 'src/common/types';
 
 // utils
 import { ILike } from 'typeorm';
-import { hash } from 'src/common/hashing';
-import { UserCredentials } from 'src/common/types';
+import { createHashFromPassword } from 'src/common/helpers';
 
 // content
 
@@ -66,7 +66,7 @@ export class UsersService {
 
   public async findOnlyCredentialsByUsername(
     username: string,
-  ): Promise<UserCredentials> {
+  ): Promise<UserCredentialsDto> {
     return this.findByUsernameOr404(
       username,
       {
@@ -89,14 +89,14 @@ export class UsersService {
   public async createOne(data: CreateUserDto): Promise<User> {
     const user = this.usersRepository.create({
       ...data,
-      password: await hash(data.password),
+      password: await createHashFromPassword(data.password),
     });
     return this.usersRepository.save(user);
   }
 
   public async updateOne(user: User, data: UpdateUserDto): Promise<User> {
     if (data.password) {
-      data.password = await hash(data.password);
+      data.password = await createHashFromPassword(data.password);
     }
     return this.usersRepository.save({ ...user, ...data });
   }

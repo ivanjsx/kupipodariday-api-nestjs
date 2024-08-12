@@ -9,10 +9,10 @@ import { PassportStrategy } from '@nestjs/passport';
 import { UsersService } from 'src/users/users.service';
 
 // utils
-import { compare } from 'src/common/hashing';
+import { UserCredentialsDto } from 'src/common/types';
+import { comparePasswordWithHash } from 'src/common/helpers';
 
 // constants
-import { UserCredentials } from 'src/common/types';
 import { INCORRECT_CREDENTIALS } from 'src/common/error-messages';
 
 // content
@@ -23,10 +23,13 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
     super();
   }
 
-  async validate(username: string, password: string): Promise<UserCredentials> {
+  async validate(
+    username: string,
+    password: string,
+  ): Promise<UserCredentialsDto> {
     const credentials =
       await this.usersService.findOnlyCredentialsByUsername(username);
-    const match = await compare(password, credentials.password);
+    const match = await comparePasswordWithHash(password, credentials.password);
     if (!match) {
       throw new UnauthorizedException(INCORRECT_CREDENTIALS);
     }

@@ -25,11 +25,9 @@ import { HidePasswordFromUser } from 'src/common/interceptors';
 // entities
 import { User } from 'src/users/users.entities';
 
-// data transfer objects
+// utils
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
-
-// types
-import { AccessToken, UserCredentials } from 'src/common/types';
+import { AccessToken, UserCredentialsDto } from 'src/common/types';
 
 // content
 
@@ -52,7 +50,7 @@ export class AuthController {
   @UseFilters(IncorrectUsername)
   async signIn(
     @CurrentlyAuthenticatedUser()
-    credentials: UserCredentials,
+    credentials: UserCredentialsDto,
   ): Promise<AccessToken> {
     return this.authService.authenticate(credentials);
   }

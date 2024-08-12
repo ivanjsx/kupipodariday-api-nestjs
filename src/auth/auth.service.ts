@@ -4,8 +4,12 @@ import { Injectable } from '@nestjs/common';
 // providers
 import { JwtService } from '@nestjs/jwt';
 
-// types
-import { UserCredentials, AccessToken, JwtPayload } from 'src/common/types';
+// utils
+import {
+  UserCredentialsDto,
+  JwtPayloadDto,
+  AccessToken,
+} from 'src/common/types';
 
 // content
 
@@ -13,9 +17,9 @@ import { UserCredentials, AccessToken, JwtPayload } from 'src/common/types';
 export class AuthService {
   constructor(private readonly jwtService: JwtService) {}
 
-  async authenticate(credentials: UserCredentials): Promise<AccessToken> {
+  async authenticate(credentials: UserCredentialsDto): Promise<AccessToken> {
     const { username, id: sub } = credentials;
-    const payload: JwtPayload = { username, sub };
+    const payload: JwtPayloadDto = { username, sub };
     const access_token = await this.jwtService.signAsync(payload);
     return { access_token };
   }

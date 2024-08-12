@@ -13,7 +13,7 @@ import { UsersService } from 'src/users/users.service';
 import { User } from 'src/users/users.entities';
 
 // types
-import { JwtPayload } from 'src/common/types';
+import { JwtPayloadDto } from 'src/common/types';
 
 // content
 
@@ -30,7 +30,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  async validate(payload: JwtPayload): Promise<User> {
+  async validate(payload: JwtPayloadDto): Promise<User> {
     return this.usersService.findWithWishesById(payload.sub);
   }
 }
