@@ -1,12 +1,5 @@
 // decorators
-import {
-  IsOptional,
-  IsPositive,
-  IsNumber,
-  Length,
-  IsUrl,
-  Max,
-} from 'class-validator';
+import { IsPositive, IsNumber, Length, IsUrl, Max } from 'class-validator';
 
 // constants
 import {
@@ -36,9 +29,8 @@ export class CreateWishDto {
   })
   image: string;
 
-  @IsOptional()
   @Length(MIN_WISH_DESCRIPTION_LENGTH, MAX_WISH_DESCRIPTION_LENGTH)
-  description?: string;
+  description: string;
 
   @IsPositive()
   @Max(MONEY_DECIMAL_MAX_VALUE)

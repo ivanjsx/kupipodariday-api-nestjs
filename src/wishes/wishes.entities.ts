@@ -69,7 +69,6 @@ export class Wish extends WithIdAndDates {
 
   @Length(MIN_WISH_DESCRIPTION_LENGTH, MAX_WISH_DESCRIPTION_LENGTH)
   @Column({
-    nullable: true,
     length: MAX_WISH_DESCRIPTION_LENGTH,
   })
   description: string;
