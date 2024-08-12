@@ -17,9 +17,12 @@ import {
   ME,
 } from '../users.constants';
 
+// types
+import { EscapableDto } from 'src/common/types';
+
 // content
 
-export class CreateUserDto {
+export class CreateUserDto extends EscapableDto {
   @IsEmail({
     allow_utf8_local_part: false,
   })

@@ -14,9 +14,12 @@ import {
   MONEY_DECIMAL_SCALE,
 } from 'src/common/constants';
 
+// types
+import { EscapableDto } from 'src/common/types';
+
 // content
 
-export class CreateOfferDto {
+export class CreateOfferDto extends EscapableDto {
   @IsOptional()
   @IsBoolean()
   hidden?: boolean;

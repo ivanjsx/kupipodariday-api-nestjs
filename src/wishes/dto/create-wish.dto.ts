@@ -13,9 +13,12 @@ import {
   MAX_WISH_NAME_LENGTH,
 } from '../wishes.constants';
 
+// types
+import { EscapableDto } from 'src/common/types';
+
 // content
 
-export class CreateWishDto {
+export class CreateWishDto extends EscapableDto {
   @Length(MIN_WISH_NAME_LENGTH, MAX_WISH_NAME_LENGTH)
   name: string;
 

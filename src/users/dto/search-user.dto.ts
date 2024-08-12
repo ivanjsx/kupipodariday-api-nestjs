@@ -1,6 +1,12 @@
+// decorators
 import { IsNotEmpty, IsString } from 'class-validator';
 
-export class SearchUserDto {
+// types
+import { EscapableDto } from 'src/common/types';
+
+// content
+
+export class SearchUserDto extends EscapableDto {
   @IsString()
   @IsNotEmpty()
   query: string;
