@@ -1,10 +1,18 @@
 // decorators
 import {
   IsOptional,
-  IsPositive, IsBoolean, IsNumber, IsInt } from 'class-validator';
+  IsPositive,
+  IsBoolean,
+  IsNumber,
+  IsInt,
+  Max,
+} from 'class-validator';
 
 // constants
-import { MONEY_DECIMAL_PLACES } from 'src/common/constants';
+import {
+  MONEY_DECIMAL_MAX_VALUE,
+  MONEY_DECIMAL_SCALE,
+} from 'src/common/constants';
 
 // content
 
@@ -14,10 +22,11 @@ export class CreateOfferDto {
   hidden?: boolean;
 
   @IsPositive()
+  @Max(MONEY_DECIMAL_MAX_VALUE)
   @IsNumber({
     allowNaN: false,
     allowInfinity: false,
-    maxDecimalPlaces: MONEY_DECIMAL_PLACES,
+    maxDecimalPlaces: MONEY_DECIMAL_SCALE,
   })
   amount: number;
 
