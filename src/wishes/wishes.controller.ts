@@ -97,6 +97,7 @@ export class WishesController {
   @Post(':id/copy')
   @UseGuards(JwtAuth)
   @UseFilters(WishNotFound)
+  @UseInterceptors(HideOwnersWishesFromWish)
   async copyOne(
     @Param('id', ParseIntPipe) id: number,
     @CurrentlyAuthenticatedUser() me: User,

@@ -1,6 +1,7 @@
 // libraries
 import { CurrentlyAuthenticatedUser } from 'src/common/decorators';
 import {
+  UseInterceptors,
   ParseIntPipe,
   Controller,
   UseFilters,
@@ -20,6 +21,9 @@ import { JwtAuth } from 'src/auth/jwt/jwt.guard';
 // filters
 import { WishNotFound, OfferNotFound } from 'src/common/filters';
 
+// interceptors
+import { HideItemFromOffer } from 'src/common/interceptors';
+
 // entities
 import { Offer } from './offers.entities';
 import { User } from 'src/users/users.entities';
@@ -36,6 +40,7 @@ export class OffersController {
 
   @Post()
   @UseFilters(WishNotFound)
+  @UseInterceptors(HideItemFromOffer)
   async createOne(
     @Body() data: CreateOfferDto,
     @CurrentlyAuthenticatedUser() me: User,
