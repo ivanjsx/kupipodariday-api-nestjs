@@ -20,7 +20,7 @@ import { LocalAuth } from './local/local.guard';
 import { IncorrectUsername, UserAlreadyExists } from 'src/common/filters';
 
 // interceptors
-import { HidePassword } from 'src/common/interceptors';
+import { HidePasswordFromUser } from 'src/common/interceptors';
 
 // entities
 import { User } from 'src/users/users.entities';
@@ -42,7 +42,7 @@ export class AuthController {
 
   @Post('signup')
   @UseFilters(UserAlreadyExists)
-  @UseInterceptors(HidePassword)
+  @UseInterceptors(HidePasswordFromUser)
   async signUp(@Body() data: CreateUserDto): Promise<User> {
     return this.usersService.createOne(data);
   }

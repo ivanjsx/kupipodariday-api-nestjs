@@ -22,7 +22,8 @@ import { JwtAuth } from 'src/auth/jwt/jwt.guard';
 import { UserNotFound, UserAlreadyExists } from 'src/common/filters';
 
 // interceptors
-import { HideWishes } from 'src/common/interceptors';
+import { HideWishesFromUser } from 'src/common/interceptors';
+import { HidePasswordFromUser } from 'src/common/interceptors';
 
 // entities
 import { User } from './users.entities';
@@ -34,7 +35,6 @@ import { SearchUserDto } from './dto/search-user.dto';
 
 // constants
 import { ME } from './users.constants';
-import { HidePassword } from 'src/common/interceptors';
 
 // content
 
@@ -44,7 +44,7 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get(ME)
-  @UseInterceptors(HideWishes)
+  @UseInterceptors(HideWishesFromUser)
   findMe(@CurrentlyAuthenticatedUser() me: User): User {
     return me;
   }
@@ -55,8 +55,7 @@ export class UsersController {
   }
 
   @Patch(ME)
-  @UseInterceptors(HideWishes)
-  @UseInterceptors(HidePassword)
+  @UseInterceptors(HideWishesFromUser, HidePasswordFromUser)
   @UseFilters(UserAlreadyExists)
   async updateMe(
     @Body() data: UpdateUserDto,

@@ -14,7 +14,7 @@ import { Wish } from 'src/wishes/wishes.entities';
 // content
 
 @Injectable()
-export class HidePassword implements NestInterceptor<User, User> {
+export class HidePasswordFromUser implements NestInterceptor<User, User> {
   intercept(
     context: ExecutionContext,
     next: CallHandler<User>,
@@ -29,7 +29,7 @@ export class HidePassword implements NestInterceptor<User, User> {
 }
 
 @Injectable()
-export class HideWishes implements NestInterceptor<User, User> {
+export class HideWishesFromUser implements NestInterceptor<User, User> {
   intercept(
     context: ExecutionContext,
     next: CallHandler<User>,
@@ -44,7 +44,7 @@ export class HideWishes implements NestInterceptor<User, User> {
 }
 
 @Injectable()
-export class HideHiddenOffers implements NestInterceptor<Wish, Wish> {
+export class HideHiddenOffersFromWish implements NestInterceptor<Wish, Wish> {
   intercept(
     context: ExecutionContext,
     next: CallHandler<Wish>,
@@ -52,6 +52,21 @@ export class HideHiddenOffers implements NestInterceptor<Wish, Wish> {
     return next.handle().pipe(
       map((wish: Wish) => {
         wish.offers = wish.offers.filter((offer) => !offer.hidden);
+        return wish;
+      }),
+    );
+  }
+}
+
+@Injectable()
+export class HideOwnersWishesFromWish implements NestInterceptor<Wish, Wish> {
+  intercept(
+    context: ExecutionContext,
+    next: CallHandler<Wish>,
+  ): Observable<Wish> {
+    return next.handle().pipe(
+      map((wish: Wish) => {
+        delete wish.owner.wishes;
         return wish;
       }),
     );

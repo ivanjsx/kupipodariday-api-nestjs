@@ -25,7 +25,10 @@ import { JwtAuth } from 'src/auth/jwt/jwt.guard';
 import { WishNotFound } from 'src/common/filters';
 
 // interceptors
-import { HideHiddenOffers } from 'src/common/interceptors';
+import {
+  HideHiddenOffersFromWish,
+  HideOwnersWishesFromWish,
+} from 'src/common/interceptors';
 
 // entities
 import { Wish } from './wishes.entities';
@@ -58,6 +61,7 @@ export class WishesController {
 
   @Post()
   @UseGuards(JwtAuth)
+  @UseInterceptors(HideOwnersWishesFromWish)
   async createOne(
     @Body() data: CreateWishDto,
     @CurrentlyAuthenticatedUser() me: User,
@@ -68,7 +72,7 @@ export class WishesController {
   @Get(':id')
   @UseGuards(JwtAuth)
   @UseFilters(WishNotFound)
-  @UseInterceptors(HideHiddenOffers)
+  @UseInterceptors(HideHiddenOffersFromWish)
   async findOne(@Param('id', ParseIntPipe) id: number): Promise<Wish> {
     return this.wishesService.findWithOwnerAndOffersById(id);
   }
