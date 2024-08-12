@@ -9,3 +9,6 @@ export const LAST_WISHES_LIMIT = 40;
 
 export const ONLY_WISH_OWNER_ERROR_MESSAGE =
   'only wish owner can perform this action';
+
+export const RAISED_EXCEEDS_PRICE_ERROR_MESSAGE =
+  'raised amount exceeds the price of the wish';

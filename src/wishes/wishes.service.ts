@@ -1,5 +1,5 @@
 // decorators
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
 // providers
@@ -8,6 +8,7 @@ import { FindOptionsRelations, FindOptionsSelect, Repository } from 'typeorm';
 // entities
 import { Wish } from './wishes.entities';
 import { User } from 'src/users/users.entities';
+import { Offer } from 'src/offers/offers.entities';
 
 // data transfer objects
 import { CreateWishDto } from './dto/create-wish.dto';
@@ -15,6 +16,7 @@ import { UpdateWishDto } from './dto/update-wish.dto';
 
 // constants
 import { Direction } from 'src/common/constants';
+import { RAISED_EXCEEDS_PRICE_ERROR_MESSAGE } from './wishes.constants';
 
 // content
 
@@ -109,5 +111,15 @@ export class WishesService {
     return this.wishesRepository
       .save(from)
       .then(() => this.wishesRepository.save(to));
+  }
+
+  public async raiseMoney(wish: Wish, offer: Offer): Promise<Wish> {
+    if (wish.raised + offer.amount > wish.price) {
+      throw new BadRequestException(RAISED_EXCEEDS_PRICE_ERROR_MESSAGE);
+    }
+
+    wish.raised += offer.amount;
+
+    return this.wishesRepository.save(wish);
   }
 }

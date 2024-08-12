@@ -26,13 +26,17 @@ export class OffersService {
   public async createOne(data: CreateOfferDto, proposer: User): Promise<Offer> {
     const { itemId, hidden, amount } = data;
     const wish = await this.wishesService.findByIdOr404(itemId);
+
     const offer = this.offersRepository.create({
       hidden,
       amount,
       proposer,
       item: wish,
     });
-    return this.offersRepository.save(offer);
+
+    return this.wishesService
+      .raiseMoney(wish, offer)
+      .then(() => this.offersRepository.save(offer));
   }
 
   public async findAll(): Promise<Array<Offer>> {
