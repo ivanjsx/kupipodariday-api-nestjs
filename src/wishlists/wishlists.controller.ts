@@ -28,8 +28,8 @@ import { User } from 'src/users/users.entities';
 import { Wishlist } from './wishlists.entities';
 
 // data transfer objects
-import { CreateWishlistDto } from './dto/create-wishlist.dto';
-import { UpdateWishlistDto } from './dto/update-wishlist.dto';
+import { UncleanedCreateWishlistDto } from './dto/create-wishlist.dto';
+import { UncleanedUpdateWishlistDto } from './dto/update-wishlist.dto';
 
 // content
 
@@ -40,10 +40,11 @@ export class WishlistsController {
 
   @Post()
   async createOne(
-    @Body() data: CreateWishlistDto,
+    @Body() data: UncleanedCreateWishlistDto,
     @CurrentlyAuthenticatedUser() me: User,
   ): Promise<Wishlist> {
-    return this.wishlistsService.createOne(data, me);
+    const cleanedData = data.escapeFields();
+    return this.wishlistsService.createOne(cleanedData, me);
   }
 
   @Get()
@@ -61,10 +62,11 @@ export class WishlistsController {
   @UseFilters(WishlistNotFound)
   @UseGuards(OnlyWishlistAuthor)
   async updateOne(
-    @Body() data: UpdateWishlistDto,
+    @Body() data: UncleanedUpdateWishlistDto,
     @Param('id', ParseIntPipe) id: number,
   ): Promise<Wishlist> {
-    return this.wishlistsService.updateOne(id, data);
+    const cleanedData = data.escapeFields();
+    return this.wishlistsService.updateOne(id, cleanedData);
   }
 
   @Delete(':id')

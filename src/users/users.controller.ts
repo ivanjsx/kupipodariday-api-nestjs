@@ -30,8 +30,8 @@ import { User } from './users.entities';
 import { Wish } from 'src/wishes/wishes.entities';
 
 // data transfer objects
-import { UpdateUserDto } from './dto/update-user.dto';
-import { SearchUserDto } from './dto/search-user.dto';
+import { UncleanedUpdateUserDto } from './dto/update-user.dto';
+import { UncleanedSearchUserDto } from './dto/search-user.dto';
 
 // constants
 import { ME } from './users.constants';
@@ -58,10 +58,11 @@ export class UsersController {
   @UseInterceptors(HideWishesFromUser, HidePasswordFromUser)
   @UseFilters(UserAlreadyExists)
   async updateMe(
-    @Body() data: UpdateUserDto,
+    @Body() data: UncleanedUpdateUserDto,
     @CurrentlyAuthenticatedUser() me: User,
   ): Promise<User> {
-    return this.usersService.updateOne(me, data);
+    const cleanedData = data.escapeFields();
+    return this.usersService.updateOne(me, cleanedData);
   }
 
   @Get(':username')
@@ -80,7 +81,8 @@ export class UsersController {
   }
 
   @Post('find')
-  async searchMany(@Body() data: SearchUserDto): Promise<Array<User>> {
-    return this.usersService.searchMany(data);
+  async searchMany(@Body() data: UncleanedSearchUserDto): Promise<Array<User>> {
+    const cleanedData = data.escapeFields();
+    return this.usersService.searchMany(cleanedData);
   }
 }

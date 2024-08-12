@@ -29,7 +29,7 @@ import { Offer } from './offers.entities';
 import { User } from 'src/users/users.entities';
 
 // data transfer objects
-import { CreateOfferDto } from './dto/create-offer.dto';
+import { UncleanedCreateOfferDto } from './dto/create-offer.dto';
 
 // content
 
@@ -42,10 +42,11 @@ export class OffersController {
   @UseFilters(WishNotFound)
   @UseInterceptors(HideItemFromOffer)
   async createOne(
-    @Body() data: CreateOfferDto,
+    @Body() data: UncleanedCreateOfferDto,
     @CurrentlyAuthenticatedUser() me: User,
   ): Promise<Offer> {
-    return this.offersService.createOne(data, me);
+    const cleanedData = data.escapeFields();
+    return this.offersService.createOne(cleanedData, me);
   }
 
   @Get()

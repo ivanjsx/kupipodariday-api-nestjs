@@ -26,8 +26,8 @@ import { HidePasswordFromUser } from 'src/common/interceptors';
 import { User } from 'src/users/users.entities';
 
 // utils
-import { CreateUserDto } from 'src/users/dto/create-user.dto';
-import { AccessToken, UserCredentialsDto } from 'src/common/types';
+import { UserCredentialsDto, AccessToken } from 'src/common/types';
+import { UncleanedCreateUserDto } from 'src/users/dto/create-user.dto';
 
 // content
 
@@ -41,8 +41,9 @@ export class AuthController {
   @Post('signup')
   @UseFilters(UserAlreadyExists)
   @UseInterceptors(HidePasswordFromUser)
-  async signUp(@Body() data: CreateUserDto): Promise<User> {
-    return this.usersService.createOne(data);
+  async signUp(@Body() data: UncleanedCreateUserDto): Promise<User> {
+    const cleanedData = data.escapeFields();
+    return this.usersService.createOne(cleanedData);
   }
 
   @Post('signin')

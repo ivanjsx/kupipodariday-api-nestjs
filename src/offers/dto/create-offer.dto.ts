@@ -1,3 +1,6 @@
+// libraries
+import { OmitType } from '@nestjs/mapped-types';
+
 // decorators
 import {
   IsOptional,
@@ -15,11 +18,11 @@ import {
 } from 'src/common/constants';
 
 // types
-import { EscapableDto } from 'src/common/types';
+import { UncleanedEscapableDto } from 'src/common/types';
 
 // content
 
-export class CreateOfferDto extends EscapableDto {
+export class UncleanedCreateOfferDto extends UncleanedEscapableDto {
   @IsOptional()
   @IsBoolean()
   hidden?: boolean;
@@ -37,7 +40,11 @@ export class CreateOfferDto extends EscapableDto {
   @IsPositive()
   itemId: number;
 
-  public escapeFields(): this {
+  public escapeFields(): CreateOfferDto {
     return this;
   }
 }
+
+export class CreateOfferDto extends OmitType(UncleanedCreateOfferDto, [
+  'escapeFields',
+]) {}

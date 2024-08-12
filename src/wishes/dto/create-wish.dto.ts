@@ -1,5 +1,6 @@
 // libraries
 import escape from 'escape-html';
+import { OmitType } from '@nestjs/mapped-types';
 
 // decorators
 import { IsPositive, IsNumber, Length, IsUrl, Max } from 'class-validator';
@@ -17,11 +18,11 @@ import {
 } from '../wishes.constants';
 
 // types
-import { EscapableDto } from 'src/common/types';
+import { UncleanedEscapableDto } from 'src/common/types';
 
 // content
 
-export class CreateWishDto extends EscapableDto {
+export class UncleanedCreateWishDto extends UncleanedEscapableDto {
   @Length(MIN_WISH_NAME_LENGTH, MAX_WISH_NAME_LENGTH)
   name: string;
 
@@ -47,7 +48,7 @@ export class CreateWishDto extends EscapableDto {
   })
   price: number;
 
-  public escapeFields(): this {
+  public escapeFields(): CreateWishDto {
     const { name, link, image, description } = this;
     return {
       name: escape(name),
@@ -55,6 +56,10 @@ export class CreateWishDto extends EscapableDto {
       image: escape(image),
       description: escape(description),
       price: this.price,
-    } as this;
+    };
   }
 }
+
+export class CreateWishDto extends OmitType(UncleanedCreateWishDto, [
+  'escapeFields',
+]) {}

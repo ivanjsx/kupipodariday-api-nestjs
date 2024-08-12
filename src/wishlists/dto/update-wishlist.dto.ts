@@ -1,4 +1,23 @@
-import { PartialType } from '@nestjs/mapped-types';
+// libraries
+import escape from 'escape-html';
+import { OmitType, PartialType } from '@nestjs/mapped-types';
+
+// utils
 import { CreateWishlistDto } from './create-wishlist.dto';
 
-export class UpdateWishlistDto extends PartialType(CreateWishlistDto) {}
+// content
+
+export class UncleanedUpdateWishlistDto extends PartialType(CreateWishlistDto) {
+  public escapeFields(): UpdateWishlistDto {
+    const { name, image } = this;
+    return {
+      name: escape(name),
+      image: escape(image),
+      itemsId: this.itemsId,
+    };
+  }
+}
+
+export class UpdateWishlistDto extends OmitType(UncleanedUpdateWishlistDto, [
+  'escapeFields',
+]) {}

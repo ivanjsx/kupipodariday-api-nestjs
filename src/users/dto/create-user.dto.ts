@@ -1,5 +1,6 @@
 // libraries
 import escape from 'escape-html';
+import { OmitType } from '@nestjs/mapped-types';
 
 // decorators
 import {
@@ -20,12 +21,12 @@ import {
   ME,
 } from '../users.constants';
 
-// types
-import { EscapableDto } from 'src/common/types';
+// utils
+import { UncleanedEscapableDto } from 'src/common/types';
 
 // content
 
-export class CreateUserDto extends EscapableDto {
+export class UncleanedCreateUserDto extends UncleanedEscapableDto {
   @IsEmail({
     allow_utf8_local_part: false,
   })
@@ -54,7 +55,7 @@ export class CreateUserDto extends EscapableDto {
   })
   avatar?: string;
 
-  public escapeFields(): this {
+  public escapeFields(): CreateUserDto {
     const { email, username, password, about, avatar } = this;
     return {
       email: escape(email),
@@ -62,6 +63,10 @@ export class CreateUserDto extends EscapableDto {
       password: escape(password),
       about: escape(about),
       avatar: escape(avatar),
-    } as this;
+    };
   }
 }
+
+export class CreateUserDto extends OmitType(UncleanedCreateUserDto, [
+  'escapeFields',
+]) {}

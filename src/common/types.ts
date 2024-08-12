@@ -21,10 +21,10 @@ export class UserCredentialsDto extends PickType(User, [
   'password',
 ]) {}
 
-export class JwtPayloadDto extends PickType(User, ['username']) {
+export class JwtPayload extends PickType(User, ['username']) {
   sub: number;
 }
 
-export abstract class EscapableDto {
-  public abstract escapeFields(): this;
+export abstract class UncleanedEscapableDto {
+  public abstract escapeFields(): any;
 }

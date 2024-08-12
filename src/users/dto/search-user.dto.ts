@@ -1,23 +1,28 @@
 // libraries
 import escape from 'escape-html';
+import { OmitType } from '@nestjs/mapped-types';
 
 // decorators
 import { IsNotEmpty, IsString } from 'class-validator';
 
-// types
-import { EscapableDto } from 'src/common/types';
+// utils
+import { UncleanedEscapableDto } from 'src/common/types';
 
 // content
 
-export class SearchUserDto extends EscapableDto {
+export class UncleanedSearchUserDto extends UncleanedEscapableDto {
   @IsString()
   @IsNotEmpty()
   query: string;
 
-  public escapeFields(): this {
+  public escapeFields(): SearchUserDto {
     const { query } = this;
     return {
       query: escape(query),
-    } as this;
+    };
   }
 }
+
+export class SearchUserDto extends OmitType(UncleanedSearchUserDto, [
+  'escapeFields',
+]) {}

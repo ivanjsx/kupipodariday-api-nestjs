@@ -35,8 +35,8 @@ import { Wish } from './wishes.entities';
 import { User } from 'src/users/users.entities';
 
 // data transfer objects
-import { CreateWishDto } from './dto/create-wish.dto';
-import { UpdateWishDto } from './dto/update-wish.dto';
+import { UncleanedCreateWishDto } from './dto/create-wish.dto';
+import { UncleanedUpdateWishDto } from './dto/update-wish.dto';
 
 // constants
 import { LAST_WISHES_LIMIT, TOP_WISHES_LIMIT } from './wishes.constants';
@@ -63,10 +63,11 @@ export class WishesController {
   @UseGuards(JwtAuth)
   @UseInterceptors(HideOwnersWishesFromWish)
   async createOne(
-    @Body() data: CreateWishDto,
+    @Body() data: UncleanedCreateWishDto,
     @CurrentlyAuthenticatedUser() me: User,
   ): Promise<Wish> {
-    return this.wishesService.createOne(data, me);
+    const cleanedData = data.escapeFields();
+    return this.wishesService.createOne(cleanedData, me);
   }
 
   @Get(':id')
@@ -81,10 +82,11 @@ export class WishesController {
   @UseFilters(WishNotFound)
   @UseGuards(JwtAuth, OnlyWishOwner)
   async updateOne(
-    @Body() data: UpdateWishDto,
+    @Body() data: UncleanedUpdateWishDto,
     @Param('id', ParseIntPipe) id: number,
   ): Promise<Wish> {
-    return this.wishesService.updateOne(id, data);
+    const cleanedData = data.escapeFields();
+    return this.wishesService.updateOne(id, cleanedData);
   }
 
   @Delete(':id')
