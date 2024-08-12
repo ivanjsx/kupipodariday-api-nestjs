@@ -1,5 +1,7 @@
 // decorators
-import { IsPositive, IsBoolean, IsNumber, IsInt } from 'class-validator';
+import {
+  IsOptional,
+  IsPositive, IsBoolean, IsNumber, IsInt } from 'class-validator';
 
 // constants
 import { MONEY_DECIMAL_PLACES } from 'src/common/constants';
@@ -7,6 +9,7 @@ import { MONEY_DECIMAL_PLACES } from 'src/common/constants';
 // content
 
 export class CreateOfferDto {
+  @IsOptional()
   @IsBoolean()
   hidden?: boolean;
 

@@ -26,6 +26,10 @@ export class CreateWishDto {
   })
   image: string;
 
+  @IsOptional()
+  @Length(MIN_WISH_DESCRIPTION_LENGTH, MAX_WISH_DESCRIPTION_LENGTH)
+  description?: string;
+
   @IsPositive()
   @IsNumber({
     allowNaN: false,
@@ -33,7 +37,4 @@ export class CreateWishDto {
     maxDecimalPlaces: MONEY_DECIMAL_PLACES,
   })
   price: number;
-
-  @Length(MIN_WISH_DESCRIPTION_LENGTH, MAX_WISH_DESCRIPTION_LENGTH)
-  description: string;
 }

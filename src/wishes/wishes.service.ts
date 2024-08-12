@@ -63,8 +63,13 @@ export class WishesService {
     return this.findByIdOr404(id, undefined, { rootCopyOf: true });
   }
 
-  public async findWithOwnerById(id: number): Promise<Wish> {
-    return this.findByIdOr404(id, undefined, { owner: true });
+  public async findWithOwnerAndOffersById(id: number): Promise<Wish> {
+    return this.findByIdOr404(id, undefined, {
+      owner: true,
+      offers: {
+        proposer: true,
+      },
+    });
   }
 
   public async findOnlyOwnerById(id: number): Promise<Wish> {
@@ -83,8 +88,8 @@ export class WishesService {
 
   public async copyOne(fromId: number, copycat: User): Promise<Wish> {
     const from = await this.findWithOriginsById(fromId);
-    const { name, link, image, price, description } = from;
-    const data: CreateWishDto = { name, link, image, price, description };
+    const { name, link, image, description, price } = from;
+    const data: CreateWishDto = { name, link, image, description, price };
 
     const to = this.wishesRepository.create({
       ...data,
