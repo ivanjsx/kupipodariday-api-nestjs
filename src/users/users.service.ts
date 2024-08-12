@@ -32,7 +32,7 @@ export class UsersService {
     private readonly usersRepository: Repository<User>,
   ) {}
 
-  private async findOr404(
+  private async _findOr404(
     clause: FindOptionsWhere<User>,
     fields: FindOptionsSelect<User>,
     join: FindOptionsRelations<User>,
@@ -49,7 +49,7 @@ export class UsersService {
     fields: FindOptionsSelect<User> = undefined,
     join: FindOptionsRelations<User> = undefined,
   ): Promise<User> {
-    return this.findOr404({ id }, fields, join);
+    return this._findOr404({ id }, fields, join);
   }
 
   public async findByUsernameOr404(
@@ -57,7 +57,7 @@ export class UsersService {
     fields: FindOptionsSelect<User> = undefined,
     join: FindOptionsRelations<User> = undefined,
   ): Promise<User> {
-    return this.findOr404({ username }, fields, join);
+    return this._findOr404({ username }, fields, join);
   }
 
   public async findWithWishesById(id: number): Promise<User> {

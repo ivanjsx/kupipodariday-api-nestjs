@@ -1,5 +1,5 @@
+// libraries
 import { Observable, map } from 'rxjs';
-import { User } from 'src/users/users.entities';
 import {
   ExecutionContext,
   NestInterceptor,
@@ -7,9 +7,17 @@ import {
   Injectable,
 } from '@nestjs/common';
 
+// entities
+import { User } from 'src/users/users.entities';
+
+// content
+
 @Injectable()
-export class HidePassword implements NestInterceptor {
-  intercept(context: ExecutionContext, next: CallHandler): Observable<User> {
+export class HidePassword implements NestInterceptor<User, User> {
+  intercept(
+    context: ExecutionContext,
+    next: CallHandler<User>,
+  ): Observable<User> {
     return next.handle().pipe(
       map((user: User) => {
         delete user.password;
@@ -20,8 +28,11 @@ export class HidePassword implements NestInterceptor {
 }
 
 @Injectable()
-export class HideWishes implements NestInterceptor {
-  intercept(context: ExecutionContext, next: CallHandler): Observable<User> {
+export class HideWishes implements NestInterceptor<User, User> {
+  intercept(
+    context: ExecutionContext,
+    next: CallHandler<User>,
+  ): Observable<User> {
     return next.handle().pipe(
       map((user: User) => {
         delete user.wishes;
