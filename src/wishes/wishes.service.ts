@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
 // providers
-import { Repository } from 'typeorm';
+import { FindOptionsRelations, FindOptionsSelect, Repository } from 'typeorm';
 
 // entities
 import { Wish } from './wishes.entities';
@@ -47,11 +47,28 @@ export class WishesService {
     return this.wishesRepository.save(wish);
   }
 
-  public async findByIdOr404(id: number, withOrigins = false): Promise<Wish> {
-    const relations = withOrigins
-      ? { directCopyOf: true, rootCopyOf: true }
-      : undefined;
-    return this.wishesRepository.findOneOrFail({ where: { id }, relations });
+  private async findByIdOr404(
+    id: number,
+    fields: FindOptionsSelect<Wish> = undefined,
+    join: FindOptionsRelations<Wish> = undefined,
+  ): Promise<Wish> {
+    return this.wishesRepository.findOneOrFail({
+      where: { id },
+      select: fields,
+      relations: join,
+    });
+  }
+
+  public async findWithOriginsById(id: number): Promise<Wish> {
+    return this.findByIdOr404(id, undefined, { rootCopyOf: true });
+  }
+
+  public async findWithOwnerById(id: number): Promise<Wish> {
+    return this.findByIdOr404(id, undefined, { owner: true });
+  }
+
+  public async findOnlyOwnerById(id: number): Promise<Wish> {
+    return this.findByIdOr404(id, { owner: undefined }, { owner: true });
   }
 
   public async updateOne(id: number, data: UpdateWishDto): Promise<Wish> {
@@ -65,7 +82,7 @@ export class WishesService {
   }
 
   public async copyOne(fromId: number, copycat: User): Promise<Wish> {
-    const from = await this.findByIdOr404(fromId, true);
+    const from = await this.findWithOriginsById(fromId);
     const { name, link, image, price, description } = from;
     const data: CreateWishDto = { name, link, image, price, description };
 

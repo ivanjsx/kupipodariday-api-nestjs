@@ -65,7 +65,7 @@ export class WishesController {
   @UseGuards(JwtAuth)
   @UseFilters(WishNotFound)
   async findOne(@Param('id', ParseIntPipe) id: number): Promise<Wish> {
-    return this.wishesService.findByIdOr404(id);
+    return this.wishesService.findWithOwnerById(id);
   }
 
   @Patch(':id')

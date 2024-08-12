@@ -35,6 +35,7 @@ export class Wishlist extends WithIdAndDates {
 
   @Length(MIN_WISHLIST_DESCRIPTION_LENGTH, MAX_WISHLIST_DESCRIPTION_LENGTH)
   @Column({
+    nullable: true,
     length: MAX_WISHLIST_DESCRIPTION_LENGTH,
   })
   description: string;

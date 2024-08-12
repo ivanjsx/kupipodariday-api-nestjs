@@ -22,7 +22,7 @@ export class OnlyWishOwner implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest<Request>();
     const wishId = parseInt(request.params.id);
-    const wish = await this.wishesServise.findByIdOr404(wishId);
+    const wish = await this.wishesServise.findOnlyOwnerById(wishId);
 
     console.log('wish.owner', wish.owner);
     console.log('request.user', request.user);
