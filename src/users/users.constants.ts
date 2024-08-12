@@ -7,7 +7,4 @@ export const MAX_USER_ABOUT_LENGTH = 200;
 export const DEFAULT_USER_AVATAR = 'https://i.pravatar.cc/300';
 export const DEFAULT_USER_ABOUT = 'Пока ничего не рассказал о себе';
 
-export const USER_NOT_FOUND_ERROR_MESSAGE =
-  'user with this username does not exist';
-
 export const ME = 'me';

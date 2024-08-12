@@ -13,7 +13,7 @@ import { compare } from 'src/common/hashing';
 
 // constants
 import { UserCredentials } from 'src/common/types';
-import { INCORRECT_CREDENTIALS_ERROR_MESSAGE } from '../auth.constants';
+import { INCORRECT_CREDENTIALS } from 'src/common/error-messages';
 
 // content
 
@@ -28,7 +28,7 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
       await this.usersService.findOnlyCredentialsByUsername(username);
     const match = await compare(password, credentials.password);
     if (!match) {
-      throw new UnauthorizedException(INCORRECT_CREDENTIALS_ERROR_MESSAGE);
+      throw new UnauthorizedException(INCORRECT_CREDENTIALS);
     }
     return credentials;
   }

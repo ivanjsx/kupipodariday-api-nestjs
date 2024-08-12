@@ -18,7 +18,7 @@ import { OffersService } from './offers.service';
 import { JwtAuth } from 'src/auth/jwt/jwt.guard';
 
 // filters
-import { OfferNotFound } from './offers.filters';
+import { WishNotFound, OfferNotFound } from 'src/common/filters';
 
 // entities
 import { Offer } from './offers.entities';
@@ -35,6 +35,7 @@ export class OffersController {
   constructor(private readonly offersService: OffersService) {}
 
   @Post()
+  @UseFilters(WishNotFound)
   async createOne(
     @Body() data: CreateOfferDto,
     @CurrentlyAuthenticatedUser() me: User,

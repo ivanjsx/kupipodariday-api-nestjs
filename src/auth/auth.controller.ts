@@ -17,8 +17,7 @@ import { UsersService } from 'src/users/users.service';
 import { LocalAuth } from './local/local.guard';
 
 // filters
-import { IncorrectUsername } from './auth.filters';
-import { UserAlreadyExists } from 'src/common/filters';
+import { IncorrectUsername, UserAlreadyExists } from 'src/common/filters';
 
 // interceptors
 import { HidePassword } from 'src/common/interceptors';
@@ -30,8 +29,7 @@ import { User } from 'src/users/users.entities';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 
 // types
-import { AccessToken } from './auth.types';
-import { UserCredentials } from 'src/common/types';
+import { AccessToken, UserCredentials } from 'src/common/types';
 
 // content
 

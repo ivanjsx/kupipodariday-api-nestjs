@@ -1,12 +1,28 @@
-import { Response } from 'express';
-import { QueryFailedError } from 'typeorm';
-import { USER_ALREADY_EXISTS_ERROR_MESSAGE } from './constants';
+// libraries
 import {
   ExceptionFilter,
   ArgumentsHost,
   HttpStatus,
   Catch,
 } from '@nestjs/common';
+
+// exceptions
+import { EntityNotFoundError, QueryFailedError } from 'typeorm';
+
+// constants
+import {
+  INCORRECT_CREDENTIALS,
+  USER_ALREADY_EXISTS,
+  WISHLIST_NOT_FOUND,
+  OFFER_NOT_FOUND,
+  USER_NOT_FOUND,
+  WISH_NOT_FOUND,
+} from './error-messages';
+
+// types
+import { Response } from 'express';
+
+// content
 
 @Catch(QueryFailedError)
 export class UserAlreadyExists implements ExceptionFilter {
@@ -16,8 +32,78 @@ export class UserAlreadyExists implements ExceptionFilter {
 
     response.status(HttpStatus.CONFLICT).json({
       error: 'Conflict',
+      message: USER_ALREADY_EXISTS,
       statusCode: HttpStatus.CONFLICT,
-      message: USER_ALREADY_EXISTS_ERROR_MESSAGE,
+    });
+  }
+}
+
+@Catch(EntityNotFoundError)
+export class IncorrectUsername implements ExceptionFilter {
+  catch(exception: EntityNotFoundError, host: ArgumentsHost): void {
+    const context = host.switchToHttp();
+    const response = context.getResponse<Response>();
+
+    response.status(HttpStatus.UNAUTHORIZED).json({
+      error: 'Unauthorized',
+      message: INCORRECT_CREDENTIALS,
+      statusCode: HttpStatus.UNAUTHORIZED,
+    });
+  }
+}
+
+@Catch(EntityNotFoundError)
+export class UserNotFound implements ExceptionFilter {
+  catch(exception: EntityNotFoundError, host: ArgumentsHost): void {
+    const context = host.switchToHttp();
+    const response = context.getResponse<Response>();
+
+    response.status(HttpStatus.NOT_FOUND).json({
+      error: 'Not Found',
+      statusCode: HttpStatus.NOT_FOUND,
+      message: USER_NOT_FOUND,
+    });
+  }
+}
+
+@Catch(EntityNotFoundError)
+export class WishNotFound implements ExceptionFilter {
+  catch(exception: EntityNotFoundError, host: ArgumentsHost): void {
+    const context = host.switchToHttp();
+    const response = context.getResponse<Response>();
+
+    response.status(HttpStatus.NOT_FOUND).json({
+      error: 'Not Found',
+      statusCode: HttpStatus.NOT_FOUND,
+      message: WISH_NOT_FOUND,
+    });
+  }
+}
+
+@Catch(EntityNotFoundError)
+export class OfferNotFound implements ExceptionFilter {
+  catch(exception: EntityNotFoundError, host: ArgumentsHost): void {
+    const context = host.switchToHttp();
+    const response = context.getResponse<Response>();
+
+    response.status(HttpStatus.NOT_FOUND).json({
+      error: 'Not Found',
+      statusCode: HttpStatus.NOT_FOUND,
+      message: OFFER_NOT_FOUND,
+    });
+  }
+}
+
+@Catch(EntityNotFoundError)
+export class WishlistNotFound implements ExceptionFilter {
+  catch(exception: EntityNotFoundError, host: ArgumentsHost): void {
+    const context = host.switchToHttp();
+    const response = context.getResponse<Response>();
+
+    response.status(HttpStatus.NOT_FOUND).json({
+      error: 'Not Found',
+      statusCode: HttpStatus.NOT_FOUND,
+      message: WISHLIST_NOT_FOUND,
     });
   }
 }

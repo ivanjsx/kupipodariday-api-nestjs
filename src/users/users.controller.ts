@@ -19,11 +19,10 @@ import { UsersService } from './users.service';
 import { JwtAuth } from 'src/auth/jwt/jwt.guard';
 
 // filters
-import { UserNotFound } from './users.filters';
-import { UserAlreadyExists } from 'src/common/filters';
+import { UserNotFound, UserAlreadyExists } from 'src/common/filters';
 
 // interceptors
-import { HideWishes } from './users.interceptors';
+import { HideWishes } from 'src/common/interceptors';
 
 // entities
 import { User } from './users.entities';

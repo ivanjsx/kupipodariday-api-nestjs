@@ -1,9 +1,6 @@
 // decorators
+import { ManyToOne, Column, Entity } from 'typeorm';
 import { IsBoolean, IsNumber, IsPositive } from 'class-validator';
-import { BeforeInsert, BeforeUpdate, Column, Entity, ManyToOne } from 'typeorm';
-
-// exceptions
-import { BadRequestException } from '@nestjs/common';
 
 // entities
 import { User } from 'src/users/users.entities';
@@ -14,7 +11,6 @@ import { WithIdAndDates } from 'src/common/entities';
 
 // constants
 import { MONEY_DECIMAL_PLACES } from 'src/common/constants';
-import { AMOUNT_EXCEEDS_PRICE_ERROR_MESSAGE } from './offers.constants';
 
 // content
 
@@ -43,14 +39,6 @@ export class Offer extends WithIdAndDates {
     onDelete: 'CASCADE',
   })
   item: Wish;
-
-  @BeforeInsert()
-  @BeforeUpdate()
-  amountNotExceedsItemPrice() {
-    if (this.amount > this.item.price) {
-      throw new BadRequestException(AMOUNT_EXCEEDS_PRICE_ERROR_MESSAGE);
-    }
-  }
 
   @ManyToOne(() => User, (user) => user.offers, {
     nullable: false,

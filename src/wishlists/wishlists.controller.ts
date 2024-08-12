@@ -21,7 +21,7 @@ import { JwtAuth } from 'src/auth/jwt/jwt.guard';
 import { OnlyWishlistAuthor } from './wishlists.guards';
 
 // filters
-import { WishlistNotFound } from './wishlists.filters';
+import { WishlistNotFound } from 'src/common/filters';
 
 // entities
 import { User } from 'src/users/users.entities';

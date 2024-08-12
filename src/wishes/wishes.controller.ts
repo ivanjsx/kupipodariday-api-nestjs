@@ -21,7 +21,7 @@ import { OnlyWishOwner } from './wishes.guards';
 import { JwtAuth } from 'src/auth/jwt/jwt.guard';
 
 // filters
-import { WishNotFound } from './wishes.filters';
+import { WishNotFound } from 'src/common/filters';
 
 // entities
 import { Wish } from './wishes.entities';

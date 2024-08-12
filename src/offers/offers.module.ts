@@ -12,11 +12,12 @@ import { OffersController } from './offers.controller';
 
 // providers
 import { OffersService } from './offers.service';
+import { WishesModule } from 'src/wishes/wishes.module';
 
 // content
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Offer])],
+  imports: [WishesModule, TypeOrmModule.forFeature([Offer])],
   controllers: [OffersController],
   providers: [OffersService],
 })

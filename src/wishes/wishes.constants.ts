@@ -7,7 +7,5 @@ export const MAX_WISH_DESCRIPTION_LENGTH = 1024;
 export const TOP_WISHES_LIMIT = 20;
 export const LAST_WISHES_LIMIT = 40;
 
-export const WISH_NOT_FOUND_ERROR_MESSAGE = 'wish with this id does not exist';
-
 export const ONLY_WISH_OWNER_ERROR_MESSAGE =
   'only wish owner can perform this action';

@@ -1,9 +1,13 @@
+// libraries
 import * as bcrypt from 'bcryptjs';
 
-const GENERATED_SALT_LENGTH = 12;
+// constants
+import { GENERATED_PASSWORD_SALT_LENGTH } from './constants';
+
+// content
 
 export function hash(password: string): Promise<string> {
-  return bcrypt.hash(password, GENERATED_SALT_LENGTH);
+  return bcrypt.hash(password, GENERATED_PASSWORD_SALT_LENGTH);
 }
 
 export function compare(password: string, hash: string): Promise<boolean> {

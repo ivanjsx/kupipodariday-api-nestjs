@@ -47,7 +47,7 @@ export class WishesService {
     return this.wishesRepository.save(wish);
   }
 
-  private async findByIdOr404(
+  public async findByIdOr404(
     id: number,
     fields: FindOptionsSelect<Wish> = undefined,
     join: FindOptionsRelations<Wish> = undefined,

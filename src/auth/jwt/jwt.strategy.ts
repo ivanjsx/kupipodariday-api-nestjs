@@ -13,7 +13,7 @@ import { UsersService } from 'src/users/users.service';
 import { User } from 'src/users/users.entities';
 
 // types
-import { JwtPayload } from '../auth.types';
+import { JwtPayload } from 'src/common/types';
 
 // content
 

@@ -4,6 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 
 // providers
 import { Repository } from 'typeorm';
+import { WishesService } from 'src/wishes/wishes.service';
 
 // entities
 import { Offer } from './offers.entities';
@@ -19,12 +20,17 @@ export class OffersService {
   constructor(
     @InjectRepository(Offer)
     private readonly offersRepository: Repository<Offer>,
+    private readonly wishesService: WishesService,
   ) {}
 
   public async createOne(data: CreateOfferDto, proposer: User): Promise<Offer> {
+    const { itemId, hidden, amount } = data;
+    const wish = await this.wishesService.findByIdOr404(itemId);
     const offer = this.offersRepository.create({
-      ...data,
+      hidden,
+      amount,
       proposer,
+      item: wish,
     });
     return this.offersRepository.save(offer);
   }
