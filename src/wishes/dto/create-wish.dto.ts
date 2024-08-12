@@ -1,3 +1,6 @@
+// libraries
+import escape from 'escape-html';
+
 // decorators
 import { IsPositive, IsNumber, Length, IsUrl, Max } from 'class-validator';
 
@@ -43,4 +46,15 @@ export class CreateWishDto extends EscapableDto {
     maxDecimalPlaces: MONEY_DECIMAL_SCALE,
   })
   price: number;
+
+  public escapeFields(): this {
+    const { name, link, image, description } = this;
+    return {
+      name: escape(name),
+      link: escape(link),
+      image: escape(image),
+      description: escape(description),
+      price: this.price,
+    } as this;
+  }
 }

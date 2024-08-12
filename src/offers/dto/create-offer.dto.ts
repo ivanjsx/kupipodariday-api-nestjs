@@ -36,4 +36,8 @@ export class CreateOfferDto extends EscapableDto {
   @IsInt()
   @IsPositive()
   itemId: number;
+
+  public escapeFields(): this {
+    return this;
+  }
 }

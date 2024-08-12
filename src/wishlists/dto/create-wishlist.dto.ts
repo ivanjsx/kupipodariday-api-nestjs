@@ -1,3 +1,6 @@
+// libraries
+import escape from 'escape-html';
+
 // decorators
 import { IsInt, IsPositive, IsUrl, Length } from 'class-validator';
 
@@ -24,4 +27,13 @@ export class CreateWishlistDto extends EscapableDto {
   @IsInt({ each: true })
   @IsPositive({ each: true })
   itemsId: Array<number>;
+
+  public escapeFields(): this {
+    const { name, image } = this;
+    return {
+      name: escape(name),
+      image: escape(image),
+      itemsId: this.itemsId,
+    } as this;
+  }
 }

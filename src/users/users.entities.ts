@@ -37,12 +37,6 @@ export class User extends WithIdAndDates {
   })
   email: string;
 
-  @Exclude()
-  @Column({
-    select: false,
-  })
-  password: string;
-
   @NotEquals(ME)
   @Length(MIN_USERNAME_LENGTH, MAX_USERNAME_LENGTH)
   @Column({
@@ -50,6 +44,12 @@ export class User extends WithIdAndDates {
     unique: true,
   })
   username: string;
+
+  @Exclude()
+  @Column({
+    select: false,
+  })
+  password: string;
 
   @Length(MIN_USER_ABOUT_LENGTH, MAX_USER_ABOUT_LENGTH)
   @Column({

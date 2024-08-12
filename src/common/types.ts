@@ -1,5 +1,4 @@
 // libraries
-import escape from 'escape-html';
 import { Request } from 'express';
 import { PickType } from '@nestjs/mapped-types';
 
@@ -27,15 +26,5 @@ export class JwtPayloadDto extends PickType(User, ['username']) {
 }
 
 export abstract class EscapableDto {
-  public escapeFields(): typeof this {
-    const result: Record<string, any> = {};
-    for (const field in this) {
-      if (typeof field === 'string') {
-        result[field] = escape(field);
-      } else {
-        result[field] = field;
-      }
-    }
-    return result as typeof this;
-  }
+  public abstract escapeFields(): this;
 }

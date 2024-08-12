@@ -3,7 +3,7 @@ import 'reflect-metadata';
 import helmet from 'helmet';
 import { nestCsrf } from 'ncsrf';
 import { NestFactory } from '@nestjs/core';
-import * as cookieParser from 'cookie-parser';
+import cookieParser from 'cookie-parser';
 import { ValidationPipe } from '@nestjs/common';
 
 // app modules

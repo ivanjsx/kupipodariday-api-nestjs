@@ -90,8 +90,15 @@ export class WishesService {
 
   public async copyOne(fromId: number, copycat: User): Promise<Wish> {
     const from = await this.findWithOriginsById(fromId);
+
     const { name, link, image, description, price } = from;
-    const data = { name, link, image, description, price } as CreateWishDto;
+    const data: Omit<CreateWishDto, 'escapeFields'> = {
+      name,
+      link,
+      image,
+      description,
+      price,
+    };
 
     const to = this.wishesRepository.create({
       ...data,
