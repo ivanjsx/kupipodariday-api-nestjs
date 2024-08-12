@@ -9,6 +9,7 @@ import {
 
 // entities
 import { User } from 'src/users/users.entities';
+import { Wish } from 'src/wishes/wishes.entities';
 
 // content
 
@@ -37,6 +38,21 @@ export class HideWishes implements NestInterceptor<User, User> {
       map((user: User) => {
         delete user.wishes;
         return user;
+      }),
+    );
+  }
+}
+
+@Injectable()
+export class HideHiddenOffers implements NestInterceptor<Wish, Wish> {
+  intercept(
+    context: ExecutionContext,
+    next: CallHandler<Wish>,
+  ): Observable<Wish> {
+    return next.handle().pipe(
+      map((wish: Wish) => {
+        wish.offers = wish.offers.filter((offer) => !offer.hidden);
+        return wish;
       }),
     );
   }

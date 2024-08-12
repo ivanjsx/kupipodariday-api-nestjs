@@ -1,6 +1,7 @@
 // libraries
 import { CurrentlyAuthenticatedUser } from 'src/common/decorators';
 import {
+  UseInterceptors,
   ParseIntPipe,
   Controller,
   UseFilters,
@@ -22,6 +23,9 @@ import { JwtAuth } from 'src/auth/jwt/jwt.guard';
 
 // filters
 import { WishNotFound } from 'src/common/filters';
+
+// interceptors
+import { HideHiddenOffers } from 'src/common/interceptors';
 
 // entities
 import { Wish } from './wishes.entities';
@@ -64,6 +68,7 @@ export class WishesController {
   @Get(':id')
   @UseGuards(JwtAuth)
   @UseFilters(WishNotFound)
+  @UseInterceptors(HideHiddenOffers)
   async findOne(@Param('id', ParseIntPipe) id: number): Promise<Wish> {
     return this.wishesService.findWithOwnerAndOffersById(id);
   }
