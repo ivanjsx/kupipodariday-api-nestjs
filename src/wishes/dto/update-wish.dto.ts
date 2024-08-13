@@ -9,14 +9,13 @@ import { CreateWishDto } from './create-wish.dto';
 
 export class UncleanedUpdateWishDto extends PartialType(CreateWishDto) {
   public escapeFields(): UpdateWishDto {
-    const { name, link, image, description } = this;
-    return {
-      name: escape(name),
-      link: escape(link),
-      image: escape(image),
-      description: escape(description),
-      price: this.price,
-    };
+    const result: UpdateWishDto = {};
+    if (this.name) result.name = escape(this.name);
+    if (this.link) result.link = escape(this.link);
+    if (this.image) result.image = escape(this.image);
+    if (this.description) result.description = escape(this.description);
+    if (this.price) result.price = this.price;
+    return result;
   }
 }
 

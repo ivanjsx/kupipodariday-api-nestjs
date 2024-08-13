@@ -9,12 +9,11 @@ import { CreateWishlistDto } from './create-wishlist.dto';
 
 export class UncleanedUpdateWishlistDto extends PartialType(CreateWishlistDto) {
   public escapeFields(): UpdateWishlistDto {
-    const { name, image } = this;
-    return {
-      name: escape(name),
-      image: escape(image),
-      itemsId: this.itemsId,
-    };
+    const result: UpdateWishlistDto = {};
+    if (this.name) result.name = escape(this.name);
+    if (this.image) result.image = escape(this.image);
+    if (this.itemsId) result.itemsId = this.itemsId;
+    return result;
   }
 }
 

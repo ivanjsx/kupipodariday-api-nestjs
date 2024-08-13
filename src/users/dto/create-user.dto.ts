@@ -56,14 +56,14 @@ export class UncleanedCreateUserDto extends UncleanedEscapableDto {
   avatar?: string;
 
   public escapeFields(): CreateUserDto {
-    const { email, username, password, about, avatar } = this;
-    return {
-      email: escape(email),
-      username: escape(username),
-      password: escape(password),
-      about: escape(about),
-      avatar: escape(avatar),
+    const result: CreateUserDto = {
+      email: escape(this.email),
+      username: escape(this.username),
+      password: escape(this.password),
     };
+    if (this.about) result.about = escape(this.about);
+    if (this.avatar) result.avatar = escape(this.avatar);
+    return result;
   }
 }
 

@@ -30,12 +30,12 @@ export class UncleanedCreateWishlistDto extends UncleanedEscapableDto {
   itemsId: Array<number>;
 
   public escapeFields(): CreateWishlistDto {
-    const { name, image } = this;
-    return {
-      name: escape(name),
-      image: escape(image),
+    const result: CreateWishlistDto = {
+      name: escape(this.name),
+      image: escape(this.image),
       itemsId: this.itemsId,
     };
+    return result;
   }
 }
 

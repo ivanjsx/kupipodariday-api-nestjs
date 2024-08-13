@@ -9,14 +9,13 @@ import { CreateUserDto } from './create-user.dto';
 
 export class UncleanedUpdateUserDto extends PartialType(CreateUserDto) {
   public escapeFields(): UpdateUserDto {
-    const { email, username, password, about, avatar } = this;
-    return {
-      email: escape(email),
-      username: escape(username),
-      password: escape(password),
-      about: escape(about),
-      avatar: escape(avatar),
-    };
+    const result: UpdateUserDto = {};
+    if (this.email) result.email = escape(this.email);
+    if (this.username) result.username = escape(this.username);
+    if (this.password) result.password = escape(this.password);
+    if (this.about) result.about = escape(this.about);
+    if (this.avatar) result.avatar = escape(this.avatar);
+    return result;
   }
 }
 

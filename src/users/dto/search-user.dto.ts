@@ -16,10 +16,10 @@ export class UncleanedSearchUserDto extends UncleanedEscapableDto {
   query: string;
 
   public escapeFields(): SearchUserDto {
-    const { query } = this;
-    return {
-      query: escape(query),
+    const result: SearchUserDto = {
+      query: escape(this.query),
     };
+    return result;
   }
 }
 

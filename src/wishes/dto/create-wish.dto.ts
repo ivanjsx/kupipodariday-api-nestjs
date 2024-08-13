@@ -49,14 +49,14 @@ export class UncleanedCreateWishDto extends UncleanedEscapableDto {
   price: number;
 
   public escapeFields(): CreateWishDto {
-    const { name, link, image, description } = this;
-    return {
-      name: escape(name),
-      link: escape(link),
-      image: escape(image),
-      description: escape(description),
+    const result: CreateWishDto = {
+      name: escape(this.name),
+      link: escape(this.link),
+      image: escape(this.image),
+      description: escape(this.description),
       price: this.price,
     };
+    return result;
   }
 }
 
