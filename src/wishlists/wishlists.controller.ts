@@ -65,7 +65,7 @@ export class WishlistsController {
   }
 
   @Patch(':id')
-  @UseFilters(WishlistNotFound)
+  @UseFilters(WishlistNotFound, WishNotFound)
   @UseGuards(OnlyWishlistAuthor)
   async updateOne(
     @Body() data: UncleanedUpdateWishlistDto,

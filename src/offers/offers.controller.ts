@@ -17,6 +17,7 @@ import { OffersService } from './offers.service';
 
 // guards
 import { JwtAuth } from 'src/auth/jwt/jwt.guard';
+import { OnlySomeoneElsesWish } from './offers.guards';
 
 // filters
 import { WishNotFound, OfferNotFound } from 'src/common/filters';
@@ -40,6 +41,7 @@ export class OffersController {
 
   @Post()
   @UseFilters(WishNotFound)
+  @UseGuards(OnlySomeoneElsesWish)
   @UseInterceptors(HideItemFromOffer)
   async createOne(
     @Body() data: UncleanedCreateOfferDto,
