@@ -12,11 +12,12 @@ import { WishlistsController } from './wishlists.controller';
 
 // providers
 import { WishlistsService } from './wishlists.service';
+import { WishesModule } from 'src/wishes/wishes.module';
 
 // content
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Wishlist])],
+  imports: [WishesModule, TypeOrmModule.forFeature([Wishlist])],
   controllers: [WishlistsController],
   providers: [WishlistsService],
 })

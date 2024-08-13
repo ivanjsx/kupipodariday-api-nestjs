@@ -21,7 +21,7 @@ import { JwtAuth } from 'src/auth/jwt/jwt.guard';
 import { OnlyWishlistAuthor } from './wishlists.guards';
 
 // filters
-import { WishlistNotFound } from 'src/common/filters';
+import { WishlistNotFound, WishNotFound } from 'src/common/filters';
 
 // entities
 import { User } from 'src/users/users.entities';
@@ -39,6 +39,7 @@ export class WishlistsController {
   constructor(private readonly wishlistsService: WishlistsService) {}
 
   @Post()
+  @UseFilters(WishNotFound)
   async createOne(
     @Body() data: UncleanedCreateWishlistDto,
     @CurrentlyAuthenticatedUser() me: User,

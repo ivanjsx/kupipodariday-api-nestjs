@@ -55,8 +55,8 @@ export class UsersController {
   }
 
   @Patch(ME)
-  @UseInterceptors(HideWishesFromUser, HidePasswordFromUser)
   @UseFilters(UserAlreadyExists)
+  @UseInterceptors(HideWishesFromUser, HidePasswordFromUser)
   async updateMe(
     @Body() data: UncleanedUpdateUserDto,
     @CurrentlyAuthenticatedUser() me: User,

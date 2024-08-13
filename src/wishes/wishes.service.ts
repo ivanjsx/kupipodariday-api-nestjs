@@ -97,7 +97,7 @@ export class WishesService {
     const from = await this.findWithOriginsById(fromId);
 
     const { name, link, image, description, price } = from;
-    const data: Omit<CreateWishDto, 'escapeFields'> = {
+    const data: CreateWishDto = {
       name,
       link,
       image,

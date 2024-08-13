@@ -3,6 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
 // providers
+import { WishesService } from 'src/wishes/wishes.service';
 import { FindOptionsRelations, FindOptionsSelect, Repository } from 'typeorm';
 
 // entities
@@ -20,16 +21,25 @@ export class WishlistsService {
   constructor(
     @InjectRepository(Wishlist)
     private readonly wishlistsRepository: Repository<Wishlist>,
+    private readonly wishesService: WishesService,
   ) {}
 
   public async createOne(
     data: CreateWishlistDto,
     author: User,
   ): Promise<Wishlist> {
+    const { itemsId, name, image } = data;
+    const wishes = await Promise.all(
+      itemsId.map((id) => this.wishesService.findByIdOr404(id)),
+    );
+
     const wishlist = this.wishlistsRepository.create({
-      ...data,
+      name,
+      image,
       author,
+      items: wishes,
     });
+
     return this.wishlistsRepository.save(wishlist);
   }
 
@@ -55,7 +65,14 @@ export class WishlistsService {
 
   async updateOne(id: number, data: UpdateWishlistDto): Promise<Wishlist> {
     const wishlist = await this.findByIdOr404(id);
-    return this.wishlistsRepository.save({ ...wishlist, ...data });
+    const { itemsId, name, image } = data;
+    if (itemsId) {
+      const wishes = await Promise.all(
+        itemsId.map((id) => this.wishesService.findByIdOr404(id)),
+      );
+      wishlist.items = wishes;
+    }
+    return this.wishlistsRepository.save({ ...wishlist, name, image });
   }
 
   async removeOne(id: number): Promise<Wishlist> {
