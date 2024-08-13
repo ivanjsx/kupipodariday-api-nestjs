@@ -44,7 +44,9 @@ export class WishlistsService {
   }
 
   public async findAll(): Promise<Array<Wishlist>> {
-    return this.wishlistsRepository.find();
+    return this.wishlistsRepository.find({
+      relations: { author: true, items: true },
+    });
   }
 
   public async findByIdOr404(

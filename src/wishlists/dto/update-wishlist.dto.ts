@@ -12,6 +12,7 @@ export class UncleanedUpdateWishlistDto extends PartialType(CreateWishlistDto) {
     const result: UpdateWishlistDto = {};
     if (this.name) result.name = escape(this.name);
     if (this.image) result.image = escape(this.image);
+    if (this.description) result.description = escape(this.description);
     if (this.itemsId) result.itemsId = this.itemsId;
     return result;
   }
