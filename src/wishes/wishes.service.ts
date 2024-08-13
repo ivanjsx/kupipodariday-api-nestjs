@@ -16,7 +16,7 @@ import { UpdateWishDto } from './dto/update-wish.dto';
 
 // constants
 import { Direction } from 'src/common/constants';
-import { RAISED_EXCEEDS_PRICE_ERROR_MESSAGE } from './wishes.constants';
+import { RAISED_EXCEEDS_PRICE } from 'src/common/error-messages';
 
 // content
 
@@ -122,7 +122,7 @@ export class WishesService {
 
   public async raiseMoney(wish: Wish, offer: Offer): Promise<Wish> {
     if (wish.raised + offer.amount > wish.price) {
-      throw new BadRequestException(RAISED_EXCEEDS_PRICE_ERROR_MESSAGE);
+      throw new BadRequestException(RAISED_EXCEEDS_PRICE);
     }
 
     wish.raised += offer.amount;

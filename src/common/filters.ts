@@ -12,6 +12,7 @@ import { EntityNotFoundError, QueryFailedError } from 'typeorm';
 // constants
 import {
   INCORRECT_CREDENTIALS,
+  RAISED_EXCEEDS_PRICE,
   USER_ALREADY_EXISTS,
   WISHLIST_NOT_FOUND,
   OFFER_NOT_FOUND,
@@ -25,8 +26,8 @@ import { Response } from 'express';
 // content
 
 @Catch(QueryFailedError)
-export class UserAlreadyExists implements ExceptionFilter {
-  catch(exception: unknown, host: ArgumentsHost): void {
+export class UserAlreadyExists implements ExceptionFilter<QueryFailedError> {
+  catch(exception: QueryFailedError, host: ArgumentsHost): void {
     const context = host.switchToHttp();
     const response = context.getResponse<Response>();
 
@@ -39,7 +40,7 @@ export class UserAlreadyExists implements ExceptionFilter {
 }
 
 @Catch(EntityNotFoundError)
-export class IncorrectUsername implements ExceptionFilter {
+export class IncorrectUsername implements ExceptionFilter<EntityNotFoundError> {
   catch(exception: EntityNotFoundError, host: ArgumentsHost): void {
     const context = host.switchToHttp();
     const response = context.getResponse<Response>();
@@ -53,57 +54,71 @@ export class IncorrectUsername implements ExceptionFilter {
 }
 
 @Catch(EntityNotFoundError)
-export class UserNotFound implements ExceptionFilter {
+export class UserNotFound implements ExceptionFilter<EntityNotFoundError> {
   catch(exception: EntityNotFoundError, host: ArgumentsHost): void {
     const context = host.switchToHttp();
     const response = context.getResponse<Response>();
 
     response.status(HttpStatus.NOT_FOUND).json({
       error: 'Not Found',
-      statusCode: HttpStatus.NOT_FOUND,
       message: USER_NOT_FOUND,
+      statusCode: HttpStatus.NOT_FOUND,
     });
   }
 }
 
 @Catch(EntityNotFoundError)
-export class WishNotFound implements ExceptionFilter {
+export class WishNotFound implements ExceptionFilter<EntityNotFoundError> {
   catch(exception: EntityNotFoundError, host: ArgumentsHost): void {
     const context = host.switchToHttp();
     const response = context.getResponse<Response>();
 
     response.status(HttpStatus.NOT_FOUND).json({
       error: 'Not Found',
-      statusCode: HttpStatus.NOT_FOUND,
       message: WISH_NOT_FOUND,
+      statusCode: HttpStatus.NOT_FOUND,
     });
   }
 }
 
 @Catch(EntityNotFoundError)
-export class OfferNotFound implements ExceptionFilter {
+export class OfferNotFound implements ExceptionFilter<EntityNotFoundError> {
   catch(exception: EntityNotFoundError, host: ArgumentsHost): void {
     const context = host.switchToHttp();
     const response = context.getResponse<Response>();
 
     response.status(HttpStatus.NOT_FOUND).json({
       error: 'Not Found',
-      statusCode: HttpStatus.NOT_FOUND,
       message: OFFER_NOT_FOUND,
+      statusCode: HttpStatus.NOT_FOUND,
     });
   }
 }
 
 @Catch(EntityNotFoundError)
-export class WishlistNotFound implements ExceptionFilter {
+export class WishlistNotFound implements ExceptionFilter<EntityNotFoundError> {
   catch(exception: EntityNotFoundError, host: ArgumentsHost): void {
     const context = host.switchToHttp();
     const response = context.getResponse<Response>();
 
     response.status(HttpStatus.NOT_FOUND).json({
       error: 'Not Found',
-      statusCode: HttpStatus.NOT_FOUND,
       message: WISHLIST_NOT_FOUND,
+      statusCode: HttpStatus.NOT_FOUND,
+    });
+  }
+}
+
+@Catch(QueryFailedError)
+export class RaisedExceedsPrice implements ExceptionFilter<QueryFailedError> {
+  catch(exception: QueryFailedError, host: ArgumentsHost): void {
+    const context = host.switchToHttp();
+    const response = context.getResponse<Response>();
+
+    response.status(HttpStatus.BAD_REQUEST).json({
+      error: 'Bad Request',
+      message: RAISED_EXCEEDS_PRICE,
+      statusCode: HttpStatus.BAD_REQUEST,
     });
   }
 }
