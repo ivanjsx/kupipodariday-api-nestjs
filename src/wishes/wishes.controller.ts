@@ -5,7 +5,9 @@ import {
   ParseIntPipe,
   Controller,
   UseFilters,
+  HttpStatus,
   UseGuards,
+  HttpCode,
   Delete,
   Param,
   Patch,
@@ -91,9 +93,11 @@ export class WishesController {
 
   @Delete(':id')
   @UseFilters(WishNotFound)
+  @HttpCode(HttpStatus.NO_CONTENT)
   @UseGuards(JwtAuth, OnlyWishOwner)
-  async removeOne(@Param('id', ParseIntPipe) id: number): Promise<Wish> {
-    return this.wishesService.removeOne(id);
+  async removeOne(@Param('id', ParseIntPipe) id: number): Promise<void> {
+    await this.wishesService.removeOne(id);
+    return;
   }
 
   @Post(':id/copy')

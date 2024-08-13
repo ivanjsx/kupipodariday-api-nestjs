@@ -4,7 +4,9 @@ import {
   ParseIntPipe,
   Controller,
   UseFilters,
+  HttpStatus,
   UseGuards,
+  HttpCode,
   Delete,
   Param,
   Patch,
@@ -56,7 +58,10 @@ export class WishlistsController {
   @Get(':id')
   @UseFilters(WishlistNotFound)
   async findOne(@Param('id', ParseIntPipe) id: number): Promise<Wishlist> {
-    return this.wishlistsService.findByIdOr404(id);
+    return this.wishlistsService.findByIdOr404(id, undefined, {
+      author: true,
+      items: true,
+    });
   }
 
   @Patch(':id')
@@ -73,7 +78,9 @@ export class WishlistsController {
   @Delete(':id')
   @UseFilters(WishlistNotFound)
   @UseGuards(OnlyWishlistAuthor)
-  async removeOne(@Param('id', ParseIntPipe) id: number): Promise<Wishlist> {
-    return this.wishlistsService.removeOne(id);
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async removeOne(@Param('id', ParseIntPipe) id: number): Promise<void> {
+    await this.wishlistsService.removeOne(id);
+    return;
   }
 }
