@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
 // providers
-import { Repository } from 'typeorm';
+import { FindOptionsRelations, FindOptionsSelect, Repository } from 'typeorm';
 
 // entities
 import { User } from 'src/users/users.entities';
@@ -37,8 +37,20 @@ export class WishlistsService {
     return this.wishlistsRepository.find();
   }
 
-  public async findByIdOr404(id: number): Promise<Wishlist> {
-    return this.wishlistsRepository.findOneByOrFail({ id });
+  public async findByIdOr404(
+    id: number,
+    fields: FindOptionsSelect<Wishlist> = undefined,
+    join: FindOptionsRelations<Wishlist> = undefined,
+  ): Promise<Wishlist> {
+    return this.wishlistsRepository.findOneOrFail({
+      where: { id },
+      select: fields,
+      relations: join,
+    });
+  }
+
+  public async findOnlyAuthorById(id: number): Promise<Wishlist> {
+    return this.findByIdOr404(id, { author: undefined }, { author: true });
   }
 
   async updateOne(id: number, data: UpdateWishlistDto): Promise<Wishlist> {

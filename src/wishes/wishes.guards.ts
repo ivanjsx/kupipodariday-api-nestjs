@@ -19,12 +19,12 @@ import { AuthenticatedRequest } from 'src/common/types';
 
 @Injectable()
 export class OnlyWishOwner implements CanActivate {
-  constructor(private readonly wishesServise: WishesService) {}
+  constructor(private readonly wishesService: WishesService) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest<AuthenticatedRequest>();
     const wishId = parseInt(request.params.id);
-    const wish = await this.wishesServise.findOnlyOwnerById(wishId);
+    const wish = await this.wishesService.findOnlyOwnerById(wishId);
 
     if (wish.owner.id !== request.user.id) {
       throw new ForbiddenException(ONLY_WISH_OWNER_ERROR_MESSAGE);
