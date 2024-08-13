@@ -22,7 +22,7 @@ import { OnlyWishOwner } from './wishes.guards';
 import { JwtAuth } from 'src/auth/jwt/jwt.guard';
 
 // filters
-import { RaisedExceedsPrice, WishNotFound } from 'src/common/filters';
+import { WishNotFound } from 'src/common/filters';
 
 // interceptors
 import {
@@ -79,7 +79,7 @@ export class WishesController {
   }
 
   @Patch(':id')
-  @UseFilters(WishNotFound, RaisedExceedsPrice)
+  @UseFilters(WishNotFound)
   @UseGuards(JwtAuth, OnlyWishOwner)
   async updateOne(
     @Body() data: UncleanedUpdateWishDto,

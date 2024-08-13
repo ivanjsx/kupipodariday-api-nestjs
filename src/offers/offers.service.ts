@@ -35,7 +35,7 @@ export class OffersService {
     });
 
     return this.wishesService
-      .raiseMoney(wish, offer)
+      .raiseMoneyFromOffer(wish, offer)
       .then(() => this.offersRepository.save(offer));
   }
 

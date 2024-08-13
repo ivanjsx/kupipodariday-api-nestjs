@@ -12,7 +12,6 @@ import { EntityNotFoundError, QueryFailedError } from 'typeorm';
 // constants
 import {
   INCORRECT_CREDENTIALS,
-  RAISED_EXCEEDS_PRICE,
   USER_ALREADY_EXISTS,
   WISHLIST_NOT_FOUND,
   OFFER_NOT_FOUND,
@@ -105,20 +104,6 @@ export class WishlistNotFound implements ExceptionFilter<EntityNotFoundError> {
       error: 'Not Found',
       message: WISHLIST_NOT_FOUND,
       statusCode: HttpStatus.NOT_FOUND,
-    });
-  }
-}
-
-@Catch(QueryFailedError)
-export class RaisedExceedsPrice implements ExceptionFilter<QueryFailedError> {
-  catch(exception: QueryFailedError, host: ArgumentsHost): void {
-    const context = host.switchToHttp();
-    const response = context.getResponse<Response>();
-
-    response.status(HttpStatus.BAD_REQUEST).json({
-      error: 'Bad Request',
-      message: RAISED_EXCEEDS_PRICE,
-      statusCode: HttpStatus.BAD_REQUEST,
     });
   }
 }

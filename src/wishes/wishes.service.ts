@@ -80,6 +80,11 @@ export class WishesService {
 
   public async updateOne(id: number, data: UpdateWishDto): Promise<Wish> {
     const wish = await this.findByIdOr404(id);
+
+    if (data.price && wish.raised > data.price) {
+      throw new BadRequestException(RAISED_EXCEEDS_PRICE);
+    }
+
     return this.wishesRepository.save({ ...wish, ...data });
   }
 
@@ -120,7 +125,7 @@ export class WishesService {
       .then(() => this.wishesRepository.save(to));
   }
 
-  public async raiseMoney(wish: Wish, offer: Offer): Promise<Wish> {
+  public async raiseMoneyFromOffer(wish: Wish, offer: Offer): Promise<Wish> {
     if (wish.raised + offer.amount > wish.price) {
       throw new BadRequestException(RAISED_EXCEEDS_PRICE);
     }
