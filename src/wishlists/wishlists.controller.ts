@@ -35,8 +35,8 @@ import { UncleanedUpdateWishlistDto } from './dto/update-wishlist.dto';
 
 // content
 
-@Controller('wishlists')
 @UseGuards(JwtAuth)
+@Controller('wishlists')
 export class WishlistsController {
   constructor(private readonly wishlistsService: WishlistsService) {}
 
@@ -65,8 +65,8 @@ export class WishlistsController {
   }
 
   @Patch(':id')
-  @UseFilters(WishlistNotFound, WishNotFound)
   @UseGuards(OnlyWishlistAuthor)
+  @UseFilters(WishlistNotFound, WishNotFound)
   async updateOne(
     @Body() data: UncleanedUpdateWishlistDto,
     @Param('id', ParseIntPipe) id: number,

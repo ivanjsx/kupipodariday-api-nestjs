@@ -26,8 +26,8 @@ import {
 
 @Entity()
 @Unique('email', ['email'])
-@Unique('username', ['username'])
 @Check(`"username" <> '${ME}'`)
+@Unique('username', ['username'])
 export class User extends WithIdAndDates {
   @IsEmail({
     allow_utf8_local_part: false,

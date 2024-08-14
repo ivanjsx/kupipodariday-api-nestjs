@@ -29,6 +29,7 @@ export class WishesService {
 
   public async findLast(limit: number): Promise<Array<Wish>> {
     return this.wishesRepository.find({
+      relations: { owner: true, offers: true },
       order: { createdAt: Direction.DESC },
       take: limit,
     });
@@ -36,6 +37,7 @@ export class WishesService {
 
   public async findTop(limit: number): Promise<Array<Wish>> {
     return this.wishesRepository.find({
+      relations: { owner: true, offers: true },
       order: { copied: Direction.DESC },
       take: limit,
     });

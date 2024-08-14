@@ -38,8 +38,8 @@ import { ME } from './users.constants';
 
 // content
 
-@Controller('users')
 @UseGuards(JwtAuth)
+@Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 

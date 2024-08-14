@@ -34,8 +34,8 @@ import { UncleanedCreateOfferDto } from './dto/create-offer.dto';
 
 // content
 
-@Controller('offers')
 @UseGuards(JwtAuth)
+@Controller('offers')
 export class OffersController {
   constructor(private readonly offersService: OffersService) {}
 

@@ -40,7 +40,9 @@ export class OffersService {
   }
 
   public async findAll(): Promise<Array<Offer>> {
-    return this.offersRepository.find();
+    return this.offersRepository.find({
+      relations: { item: true, proposer: true },
+    });
   }
 
   public async findByIdOr404(id: number): Promise<Offer> {
