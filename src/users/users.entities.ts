@@ -29,11 +29,13 @@ import {
 @Check(`"username" <> '${ME}'`)
 @Unique('username', ['username'])
 export class User extends WithIdAndDates {
+  @Exclude()
   @IsEmail({
     allow_utf8_local_part: false,
   })
   @Column({
     unique: true,
+    select: false,
   })
   email: string;
 
