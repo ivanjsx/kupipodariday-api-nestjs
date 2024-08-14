@@ -28,7 +28,7 @@ export class WishlistsService {
     data: CreateWishlistDto,
     author: User,
   ): Promise<Wishlist> {
-    const { itemsId, name, image } = data;
+    const { itemsId, name, image, description } = data;
     const wishes = await Promise.all(
       itemsId.map((id) => this.wishesService.findByIdOr404(id)),
     );
@@ -36,6 +36,7 @@ export class WishlistsService {
     const wishlist = this.wishlistsRepository.create({
       name,
       image,
+      description,
       author,
       items: wishes,
     });
@@ -67,14 +68,19 @@ export class WishlistsService {
 
   async updateOne(id: number, data: UpdateWishlistDto): Promise<Wishlist> {
     const wishlist = await this.findByIdOr404(id);
-    const { itemsId, name, image } = data;
+    const { itemsId, name, image, description } = data;
     if (itemsId) {
       const wishes = await Promise.all(
         itemsId.map((id) => this.wishesService.findByIdOr404(id)),
       );
       wishlist.items = wishes;
     }
-    return this.wishlistsRepository.save({ ...wishlist, name, image });
+    return this.wishlistsRepository.save({
+      ...wishlist,
+      name,
+      image,
+      description,
+    });
   }
 
   async removeOne(id: number): Promise<Wishlist> {
