@@ -1,5 +1,6 @@
 // libraries
 import {
+  BadRequestException,
   ForbiddenException,
   ExecutionContext,
   CanActivate,
@@ -10,6 +11,7 @@ import {
 import { WishlistsService } from './wishlists.service';
 
 // constants
+import { NUMERIC_PARAM_EXPECTED } from 'src/common/error-messages';
 import { ONLY_WISHLIST_AUTHOR_ERROR_MESSAGE } from './wishlists.constants';
 
 // types
@@ -24,6 +26,10 @@ export class OnlyWishlistAuthor implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest<AuthenticatedRequest>();
     const wishlistId = parseInt(request.params.id);
+
+    if (!wishlistId) {
+      throw new BadRequestException(NUMERIC_PARAM_EXPECTED);
+    }
     const wishlist = await this.wishlistsService.findOnlyAuthorById(wishlistId);
 
     if (wishlist.author.id !== request.user.id) {
