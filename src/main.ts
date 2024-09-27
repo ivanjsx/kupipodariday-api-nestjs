@@ -5,6 +5,7 @@ import { nestCsrf } from 'ncsrf';
 import { NestFactory } from '@nestjs/core';
 import cookieParser from 'cookie-parser';
 import { ValidationPipe } from '@nestjs/common';
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 
 // app modules
 import { AppModule } from './app.module';
@@ -16,6 +17,14 @@ import { ConfigService } from '@nestjs/config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  const documentConfig = new DocumentBuilder()
+    .setTitle('Kupi Podari Day API')
+    .setDescription('API for managing wishlists and contributing towards gifts for others')
+    .setVersion('1.0')
+    .build();
+  const document = SwaggerModule.createDocument(app, documentConfig);
+  SwaggerModule.setup('api', app, document);
 
   app.use(cookieParser());
   app.use(nestCsrf());
